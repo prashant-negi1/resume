@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HTML & CSS – Interactive Revision Cards</title>
+  <meta name="description" content="Interactive website to revise important HTML & CSS properties. Hover a card to reveal example code and copy it instantly." />
+  <style>
+    :root{
+      --bg:#0b1220;          /* dark navy */
+      --panel:#0f172a;       /* slate 900 */
+      --card:#0f1b33;        /* deep slate */
+      --text:#e5e7eb;        /* gray 200 */
+      --muted:#9aa4b2;       /* gray 400 */
+      --accent:#00adb5;      /* teal */
+      --ring: rgba(0,173,181,.35);
+      --radius:16px;
+      --shadow:0 14px 38px rgba(2,6,23,.45);
+    }
+    body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Inter,Helvetica,Arial; background:
+      radial-gradient(1200px 800px at 100% -10%, rgba(0,173,181,.07), transparent),
+      radial-gradient(1000px 700px at -10% 120%, rgba(255,255,255,.04), transparent),
+      var(--bg);
+      color:var(--text); line-height:1.65;}
+
+    header{position:sticky;top:0;z-index:10; backdrop-filter: saturate(150%) blur(10px); background:color-mix(in srgb, var(--panel) 85%, transparent); border-bottom:1px solid color-mix(in srgb, var(--muted) 20%, transparent);}
+    .wrap{width:min(1100px,92vw);margin-inline:auto;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 0}
+    .brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
+    .logo{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4ade80);box-shadow:0 6px 16px var(--ring)}
+
+    .intro{padding:2.2rem 0 1.2rem}
+    h1{font-family:Poppins,Inter,system-ui,sans-serif;letter-spacing:.3px;font-size:clamp(1.4rem,1rem+2vw,2.2rem);margin:.2rem 0}
+    p.lead{color:var(--muted);max-width:70ch}
+
+    /* Category sections */
+    section{padding:1.2rem 0 2.2rem}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin:.6rem 0 1rem}
+    .section-head h2{font-family:Poppins,Inter,sans-serif;font-size:1.1rem;margin:0}
+    .hint{color:var(--muted);font-size:.95rem}
+
+    /* Grid of cards */
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem}
+    .card{grid-column:span 12;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid color-mix(in srgb, var(--muted) 18%, transparent);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease}
+    .card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(2,6,23,.55);border-color:color-mix(in srgb, var(--accent) 30%, var(--muted) 18%)}
+    .card h3{margin:.1rem 0 .4rem;font-size:1rem}
+    .desc{color:var(--muted);font-size:.95rem}
+
+    @media(min-width:680px){
+      .span-6{grid-column:span 6}
+      .span-4{grid-column:span 4}
+    }
+
+    /* Hover reveal code */
+    .code{position:absolute; inset:0; padding:1rem; background:linear-gradient(180deg, rgba(13,20,34,.5), rgba(13,20,34,.95)); border-radius:inherit; opacity:0; transform:translateY(8px) scale(.98); transition:opacity .35s ease, transform .35s ease; display:flex; flex-direction:column; gap:.6rem}
+    .card:hover .code{opacity:1; transform:none}
+    pre{margin:0; padding:.8rem 1rem; background:rgba(0,0,0,.35); border:1px solid color-mix(in srgb, var(--muted) 18%, transparent); border-radius:12px; overflow:auto; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size:.9rem}
+    code{color:#e9f3ff;}
+
+    .copy{align-self:flex-end; background:transparent; border:1px solid color-mix(in srgb, var(--muted) 30%, transparent); color:var(--text); border-radius:999px; padding:.45rem .8rem; cursor:pointer}
+    .copy:active{transform:scale(.98)}
+    .copied{color:#4ade80}
+
+    /* Tiny tooltip on card header */
+    .tag{display:inline-block;padding:.15rem .5rem;border:1px solid color-mix(in srgb, var(--muted) 20%, transparent);border-radius:999px;color:var(--muted);font-size:.8rem;margin-left:.4rem}
+
+    /* Footer */
+    footer{padding:3rem 0;text-align:center;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand"><span class="logo" aria-hidden="true"></span> <span>HTML & CSS – Interactive Revision</span></div>
+      <div class="hint">Hover a card → see code → <strong>Copy</strong></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <h1>Revise Important Properties Fast</h1>
+      <p class="lead">Each property/feature sits in its own card. Hover to reveal a practical, copy‑ready snippet. Use it like flashcards for interview prep or quick revision.</p>
+    </section>
+
+    <!-- Text & Fonts -->
+    <section aria-labelledby="text-fonts">
+      <div class="section-head">
+        <h2 id="text-fonts">Text & Fonts</h2>
+        <span class="hint">Typography, spacing, and casing</span>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>font-family <span class="tag">text</span></h3>
+          <p class="desc">Set a safe, modern stack that falls back gracefully.</p>
+          <div class="code"><button class="copy" data-target="ff1">Copy</button>
+            <pre id="ff1"><code>body{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>fluid type with clamp() <span class="tag">text</span></h3>
+          <p class="desc">Scale font size smoothly between min and max.</p>
+          <div class="code"><button class="copy" data-target="clamp1">Copy</button>
+            <pre id="clamp1"><code>h1{ font-size: clamp(1.5rem, 1rem + 3vw, 3rem); }</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>line-height & letter-spacing <span class="tag">text</span></h3>
+          <p class="desc">Improve readability for paragraphs and headings.</p>
+          <div class="code"><button class="copy" data-target="lh1">Copy</button>
+            <pre id="lh1"><code>p{ line-height: 1.7; }
+h1{ letter-spacing: .3px; }</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>text-transform & text-overflow <span class="tag">text</span></h3>
+          <p class="desc">Uppercase titles and ellipsis for overflow.</p>
+          <div class="code"><button class="copy" data-target="tt1">Copy</button>
+            <pre id="tt1"><code>.kicker{ text-transform: uppercase; letter-spacing: .15em; }
+.title{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colors & Backgrounds -->
+    <section aria-labelledby="colors-bg">
+      <div class="section-head">
+        <h2 id="colors-bg">Colors & Backgrounds</h2>
+        <span class="hint">Gradients, images, and clipping</span>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>linear-gradient background <span class="tag">background</span></h3>
+          <p class="desc">Quick hero background with two brand colors.</p>
+          <div class="code"><button class="copy" data-target="bg1">Copy</button>
+            <pre id="bg1"><code>.hero{ background:
+  linear-gradient(135deg, #00adb5, #4ade80);
+}</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>background-size, position, repeat <span class="tag">background</span></h3>
+          <p class="desc">Control image placement and scaling.</p>
+          <div class="code"><button class="copy" data-target="bg2">Copy</button>
+            <pre id="bg2"><code>.banner{
+  background-image: url("hero.jpg");
+  background-size: cover;     /* or contain */
+  background-position: center;
+  background-repeat: no-repeat;
+}</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>gradient text with background-clip <span class="tag">effect</span></h3>
+          <p class="desc">Create eye‑catching titles without images.</p>
+          <div class="code"><button class="copy" data-target="clip1">Copy</button>
+            <pre id="clip1"><code>.gradient-text{
+  background: linear-gradient(90deg, #00adb5, #4ade80);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layout: Flexbox & Grid -->
+    <section aria-labelledby="layout">
+      <div class="section-head">
+        <h2 id="layout">Layout (Flexbox & Grid)</h2>
+        <span class="hint">Modern 1D & 2D layout systems</span>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>flexbox basics <span class="tag">layout</span></h3>
+          <p class="desc">Horizontal center with spacing and wrapping.</p>
+          <div class="code"><button class="copy" data-target="fx1">Copy</button>
+            <pre id="fx1"><code>.toolbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem; flex-wrap: wrap;
+}</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>flex alignment tricks <span class="tag">layout</span></h3>
+          <p class="desc">Center anything perfectly.</p>
+          <div class="code"><button class="copy" data-target="fx2">Copy</button>
+            <pre id="fx2"><code>.center{
+  display:flex; min-height: 50vh;
+  justify-content:center; align-items:center;
+}</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>grid columns & gap <span class="tag">layout</span></h3>
+          <p class="desc">Responsive grid that switches at 700px.</p>
+          <div class="code"><button class="copy" data-target="gr1">Copy</button>
+            <pre id="gr1"><code>.grid{ display:grid; grid-template-columns: 1fr; gap: 1rem; }
+@media(min-width:700px){
+  .grid{ grid-template-columns: repeat(3, 1fr); }
+}</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>place-items & minmax() <span class="tag">layout</span></h3>
+          <p class="desc">Auto-fit smart columns that don’t shrink too small.</p>
+          <div class="code"><button class="copy" data-target="gr2">Copy</button>
+            <pre id="gr2"><code>.gallery{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  place-items:center; gap:1rem;
+}</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Positioning -->
+    <section aria-labelledby="positioning">
+      <div class="section-head">
+        <h2 id="positioning">Positioning</h2>
+        <span class="hint">Sticky, fixed, absolute</span>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>position: sticky <span class="tag">position</span></h3>
+          <p class="desc">Make headers stick within their parent container.</p>
+          <div class="code"><button class="copy" data-target="pos1">Copy</button>
+            <pre id="pos1"><code>.section-title{ position: sticky; top: 0; background: white; z-index: 10; }</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>z-index layering <span class="tag">position</span></h3>
+          <p class="desc">Control stacking order of overlapping elements.</p>
+          <div class="code"><button class="copy" data-target="pos2">Copy</button>
+            <pre id="pos2"><code>.modal{ position: fixed; inset: 0; z-index: 50; }
+.header{ position: sticky; top: 0; z-index: 40; }</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Transitions & Animations -->
+    <section aria-labelledby="motion">
+      <div class="section-head">
+        <h2 id="motion">Transitions & Animations</h2>
+        <span class="hint">Microinteractions that feel good</span>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>transition shorthand <span class="tag">motion</span></h3>
+          <p class="desc">Smooth hover effects in one line.</p>
+          <div class="code"><button class="copy" data-target="tr1">Copy</button>
+            <pre id="tr1"><code>.btn{ transition: transform .15s ease, box-shadow .2s ease; }
+.btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.25); }</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>@keyframes + animation <span class="tag">motion</span></h3>
+          <p class="desc">Pulse a focus ring or loading dot.</p>
+          <div class="code"><button class="copy" data-target="tr2">Copy</button>
+            <pre id="tr2"><code>@keyframes pulse{ from{ box-shadow:0 0 0 0 rgba(0,173,181,.5) } to{ box-shadow:0 0 0 14px rgba(0,173,181,0) } }
+.badge{ animation: pulse 1.5s infinite; }</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Borders & Shadows -->
+    <section aria-labelledby="borders">
+      <div class="section-head">
+        <h2 id="borders">Borders & Shadows</h2>
+        <span class="hint">Depth and emphasis</span>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>box-shadow & border-radius <span class="tag">ui</span></h3>
+          <p class="desc">Soft, modern card style.</p>
+          <div class="code"><button class="copy" data-target="bd1">Copy</button>
+            <pre id="bd1"><code>.card{ border-radius: 16px; box-shadow: 0 10px 30px rgba(2,6,23,.35); }</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>outline & focus-visible <span class="tag">a11y</span></h3>
+          <p class="desc">Accessible focus style for keyboard users.</p>
+          <div class="code"><button class="copy" data-target="bd2">Copy</button>
+            <pre id="bd2"><code>:focus-visible{ outline: 2px solid #00adb5; outline-offset: 2px; }</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Extras -->
+    <section aria-labelledby="extras">
+      <div class="section-head">
+        <h2 id="extras">Extras</h2>
+        <span class="hint">Object-fit, overflow, filters</span>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>object-fit for images <span class="tag">media</span></h3>
+          <p class="desc">Crop images responsively without distortion.</p>
+          <div class="code"><button class="copy" data-target="ex1">Copy</button>
+            <pre id="ex1"><code>.thumb{ width:100%; height:220px; object-fit:cover; border-radius:12px; }</code></pre></div>
+        </div>
+        <div class="card span-6">
+          <h3>overflow & scroll snapping <span class="tag">scroll</span></h3>
+          <p class="desc">Horizontal galleries with smooth snaps.</p>
+          <div class="code"><button class="copy" data-target="ex2">Copy</button>
+            <pre id="ex2"><code>.row{ display:flex; gap:1rem; overflow:auto; scroll-snap-type:x mandatory; }
+.row > *{ scroll-snap-align: start; }</code></pre></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Made for quick revision • Hover a card to reveal code • Click <em>Copy</em> to save to clipboard</footer>
+
+  <script>
+    // Copy to clipboard for each snippet
+    document.querySelectorAll('.copy').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-target');
+        const code = document.getElementById(id)?.innerText || '';
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1200);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prashant Negi | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar */
+    nav {
+      background: #1b2a49;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      gap: 1.5rem;
+    }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #00ADB5;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #1b2a49;
+      color: #fff;
+    }
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5rem;
+    }
+    header p a {
+      color: #00ADB5;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    header p a:hover {
+      color: #fff;
+    }
+
+    /* Sections */
+    section {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+    section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h2 {
+      font-family: 'Poppins', sans-serif;
+      color: #1b2a49;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #00ADB5;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    ul {
+      list-style: none;
+    }
+    ul li {
+      margin-bottom: 0.5rem;
+    }
+    a {
+      color: #00ADB5;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #1b2a49;
+    }
+
+    @media(max-width: 600px) {
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <ul>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#certifications">Certifications</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <h1>Prashant Negi</h1>
+    <p>
+      <a href="mailto:nprashant621@gmail.com" target="_blank">Email</a> | 
+      <a href="https://github.com/prashant-negi1" target="_blank">GitHub</a> | 
+      <a href="https://www.linkedin.com/in/prashantnegi1/" target="_blank">LinkedIn</a>
+    </p>
+  </header>
+
+  <!-- About -->
+  <section id="about">
+    <h2>About Me</h2>
+    <div class="card">
+      I'm a self-taught student with a strong passion for technology and coding. Through dedication and continuous learning, I’ve independently mastered HTML, CSS, and Tailwind CSS for front-end development. I’ve also developed solid programming skills in C++, Java, and JavaScript, with a good understanding of Data Structures and Algorithms (DSA). I am proficient with Git for version control and continuously explore new technologies to grow as a developer.
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="card">
+      <ul>
+        <li><strong>Technical:</strong> C++, Java, DSA, HTML, CSS, JavaScript, Tailwind CSS</li>
+        <li><strong>Version Control:</strong> Git & GitHub</li>
+        <li><strong>Soft Skills:</strong> Communication, Teamwork, Adaptability, Leadership</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Certifications -->
+  <section id="certifications">
+    <h2>Certifications</h2>
+    <div class="card">
+      <ul>
+        <li>
+          <a href="https://www.freecodecamp.org/certification/fcc9b18c7ec-4a0c-417c-afa4-2f6d84ffe32a/responsive-web-design" target="_blank">
+            freeCodeCamp - Responsive Web Design (April 2025)
+          </a> – HTML, CSS, JavaScript, Responsive Web Design.
+        </li>
+        <li>
+          <a href="https://www.udemy.com/certificate/UC-1dcfd8e3-7622-43f8-b7e7-a8e840d5f49a/" target="_blank">
+            Udemy - Web Development (April 2025)
+          </a> – HTML, CSS, JavaScript, Responsive Web Design.
+        </li>
+        <li>
+          <a href="https://www.codechef.com/certificates/public/be85893" target="_blank">
+            CodeChef - C++ Programming (August 2023)
+          </a> – C++ basics, problem solving, loops, functions.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education">
+    <h2>Education</h2>
+    <div class="card">
+      <ul>
+        <li>Bachelor of Technology (2022 – Present)</li>
+        <li>Class 12 – MP Board – 79.05% (2022)</li>
+        <li>Class 10 – MP Board – 87.5% (2020)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="card">
+      <p>Email: <a href="mailto:nprashant621@gmail.com" target="_blank">nprashant621@gmail.com</a></p>
+      <p>Phone: +91 8435279257</p>
+      <p>GitHub: <a href="https://github.com/prashant-negi1" target="_blank">github.com/prashant-negi1</a></p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/prashantnegi1/" target="_blank">linkedin.com/in/prashantnegi1</a></p>
+    </div>
+  </section>
+
+  <script>
+    // Fade-in effect on scroll
+    const sections = document.querySelectorAll("section");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    }, { threshold: 0.2 });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>

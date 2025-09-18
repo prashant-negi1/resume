@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CSS Masterclass — Interactive Tutorial</title>
+  <style>
+    :root{
+      --accent:#2563eb;
+      --muted:#6b7280;
+      --bg:#0f172a;
+      --card:#0b1220;
+      --glass: rgba(255,255,255,0.04);
+      --radius:12px;
+      color-scheme: dark;
+    }
+    /* Basic layout */
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;background:linear-gradient(180deg,#071129 0%, #071933 60%);color:#e6eef8}
+    header{display:flex;align-items:center;gap:18px;padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.04)}
+    header h1{font-size:20px;margin:0}
+    header p{margin:0;color:var(--muted);font-size:13px}
+
+    .app{display:grid;grid-template-columns:300px 1fr;gap:20px;padding:22px;align-items:start}
+
+    /* Sidebar */
+    .sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);padding:16px;height:calc(100vh - 120px);overflow:auto;box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+    .search{display:flex;gap:8px;margin-bottom:12px}
+    .search input{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .nav{display:flex;flex-direction:column;gap:6px}
+    .nav a{display:block;padding:10px;border-radius:8px;color:inherit;text-decoration:none;font-size:14px;border:1px solid transparent}
+    .nav a:hover{background:var(--glass);border-color:rgba(255,255,255,0.03)}
+
+    /* Main content */
+    main{overflow:auto;height:calc(100vh - 120px);padding-right:16px}
+    section{background:linear-gradient(180deg,#071a2a, rgba(255,255,255,0.02));padding:20px;border-radius:14px;margin-bottom:18px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h2{margin:0 0 8px 0}
+    .intro{color:var(--muted);margin-bottom:12px}
+
+    /* property grid */
+    .props{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+    .prop{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);position:relative}
+    .prop .title{font-weight:600;margin-bottom:8px}
+    .demo{height:84px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);margin-bottom:8px;cursor:default}
+    /* .demo[title]{ native tooltip will show } */
+    .code{background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:13px;white-space:pre;overflow:auto}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;color:inherit;cursor:pointer}
+    .small{font-size:12px;padding:4px 8px}
+
+    details p{margin:8px 0 0 0;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:900px){.app{grid-template-columns:1fr;}.sidebar{height:auto}}
+
+    /* little toast */
+    #toast{position:fixed;right:20px;bottom:20px;background:#0b1220;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);display:none}
+
+    /* code highlight (very simple) */
+    .keyword{color:#60a5fa}
+    .value{color:#fca5a5}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>CSS Masterclass — Interactive Tutorial</h1>
+      <p>Learn core → advanced CSS with live examples. Hover examples to see the short description (native tooltip). Use "Copy" to copy the snippet.</p>
+    </div>
+  </header>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div class="search">
+        <input id="search" placeholder="Search property or section..." aria-label="Search properties">
+        <button class="btn small" id="clearSearch">Clear</button>
+      </div>
+      <nav class="nav" id="nav">
+        <a href="#text">Text & Font</a>
+        <a href="#background">Background</a>
+        <a href="#box">Box Model</a>
+        <a href="#position">Positioning & Layout</a>
+        <a href="#flex">Flexbox</a>
+        <a href="#grid">Grid</a>
+        <a href="#visuals">Advanced Visuals</a>
+        <a href="#transform">Transform & Animation</a>
+        <a href="#lists">Lists & Tables</a>
+        <a href="#responsive">Responsive & Media Queries</a>
+        <a href="#vars">Variables & calc()</a>
+        <a href="#pseudo">Pseudo-classes & Elements</a>
+      </nav>
+    </aside>
+
+    <main>
+      <!-- TEXT & FONT -->
+      <section id="text">
+        <h2>Text & Font Properties</h2>
+        <p class="intro">Typography controls how text looks and reads. Below are the main properties with examples. Hover the example box to see a short description (native tooltip).</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">color</div>
+            <div class="demo" title="Sets the text color. Example uses a hex value." style="color:#ef4444;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);">
+              color: #ef4444;
+            </div>
+            <div class="code">/* sets text color */
+p { color: #ef4444; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('p { color: #ef4444; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Accepts color keywords, hex, rgb/rgba, hsl/hsla. Use contrast-aware colors for accessibility.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">font-family</div>
+            <div class="demo" title="Defines prioritized list of fonts." style="font-family: 'Georgia', serif;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);color:#fff;">
+              font-family: Georgia, serif;
+            </div>
+            <div class="code">p { font-family: 'Georgia', serif; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode"( + "'p { font-family: \'Georgia\', serif; }'" + ")">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Provide fallbacks and generic families (serif, sans-serif, monospace). Web fonts (Google Fonts) can be loaded with @import or <link>.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">font-size</div>
+            <div class="demo" title="Controls the size of text. Example uses 18px." style="font-size:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);color:#fff;">
+              font-size: 18px;
+            </div>
+            <div class="code">p { font-size: 18px; /* px, em, rem, % */ }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('p { font-size: 18px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Prefer responsive units: rem (root-based) or em (relative to parent). Use clamp() for fluid sizes.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">font-weight</div>
+            <div class="demo" title="Controls font thickness. Example: 700 (bold)." style="font-weight:700;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);">
+              font-weight: 700;
+            </div>
+            <div class="code">p { font-weight: 700; /* normal, bold, 100-900 */ }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('p { font-weight: 700; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Numeric weights depend on the font's available weights. Use variable fonts for more granular control.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">text-align</div>
+            <div class="demo" title="Aligns inline content horizontally." style="text-align:center;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);">
+              text-align: center;
+            </div>
+            <div class="code">p { text-align: center; /* left, right, center, justify */ }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('p { text-align: center; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Useful for headings and layout. Use text-justify for long passages when necessary.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">text-decoration</div>
+            <div class="demo" title="Decorations like underline/line-through." style="text-decoration: underline orange 3px; text-underline-offset:6px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);">
+              underline (accent)
+            </div>
+            <div class="code">a { text-decoration: underline orange 3px; text-underline-offset: 6px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('a { text-decoration: underline orange 3px; text-underline-offset: 6px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Modern text-decoration accepts color and thickness. text-underline-offset controls gap between text and line.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">letter-spacing &amp; word-spacing</div>
+            <div class="demo" title="Adjusts spacing between letters / words." style="letter-spacing:1.5px;word-spacing:4px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);">
+              Spaced text
+            </div>
+            <div class="code">p { letter-spacing: 1.5px; word-spacing: 4px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('p { letter-spacing: 1.5px; word-spacing: 4px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Useful for headings and improving readability when used sparingly.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">line-height</div>
+            <div class="demo" title="Controls line height (leading) for text." style="line-height:1.8;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);height:110px;">
+              line-height: 1.8
+            </div>
+            <div class="code">p { line-height: 1.8; /* unitless recommended */ }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('p { line-height: 1.8; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use unitless values (e.g., 1.5) for scalable line spacing that multiplies by font-size.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">text-shadow</div>
+            <div class="demo" title="Adds shadow to text" style="text-shadow:2px 2px 6px rgba(0,0,0,0.6);background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);">
+              text-shadow
+            </div>
+            <div class="code">p { text-shadow: 2px 2px 6px rgba(0,0,0,0.6); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('p { text-shadow: 2px 2px 6px rgba(0,0,0,0.6); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Multiple shadows allowed (comma-separated). Useful for subtle depth; avoid overuse for accessibility.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- BACKGROUND -->
+      <section id="background">
+        <h2>Background Properties</h2>
+        <p class="intro">Background controls let you layer colors, images, gradients, and control how they behave.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">background-color</div>
+            <div class="demo" title="Solid background color" style="background-color:#60a5fa;color:#012240;">
+              background-color: #60a5fa;
+            </div>
+            <div class="code">div { background-color: #60a5fa; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { background-color: #60a5fa; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use contrast-aware colors and CSS variables for themes.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">background-image (gradients)</div>
+            <div class="demo" title="linear-gradient(to right, #f97316, #f59e0b)" style="background: linear-gradient(to right, #f97316, #f59e0b);color:#fff;">
+              linear-gradient
+            </div>
+            <div class="code">div { background: linear-gradient(to right, #f97316, #f59e0b); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { background: linear-gradient(to right, #f97316, #f59e0b); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Also radial-gradient and conic-gradient available. Gradients are images (no HTTP request).</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">background-size &amp; position</div>
+            <div class="demo" title="background-size: cover; background-position: center;" style="background: linear-gradient(135deg,#a78bfa 0%, #60a5fa 100%);background-size:cover;background-position:center;">
+              size: cover; position: center;
+            </div>
+            <div class="code">div { background-size: cover; background-position: center; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { background-size: cover; background-position: center; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>cover fills the box (may crop), contain fits the whole image. Use position with two values (x y).</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">background-repeat &amp; attachment</div>
+            <div class="demo" title="background-repeat: no-repeat; background-attachment: fixed;" style="background: repeating-linear-gradient(45deg,#1f2937 0 10px,#111827 10px 20px);height:84px;">
+              repeating pattern
+            </div>
+            <div class="code">div { background-repeat: no-repeat; background-attachment: fixed; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { background-repeat: no-repeat; background-attachment: fixed; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>background-attachment: fixed can create parallax-like effects. Beware performance on mobile.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">background-blend-mode</div>
+            <div class="demo" title="blend-mode: multiply mixes colors with background" style="background: linear-gradient(45deg,#f87171, #60a5fa);mix-blend-mode:multiply;color:#fff;">
+              mix-blend-mode: multiply
+            </div>
+            <div class="code">div { background: linear-gradient(45deg,#f87171, #60a5fa); background-blend-mode: multiply; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { background-blend-mode: multiply; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>blend modes behave like Photoshop blending; useful for layered backgrounds and overlays.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- BOX MODEL -->
+      <section id="box">
+        <h2>Box Model</h2>
+        <p class="intro">Everything visual in CSS is a box. Understand sizing, spacing, borders, and the box-sizing model.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">width / height</div>
+            <div class="demo" title="Sets element width and height (px, %, vw, etc.)" style="width:180px;height:84px;background:#065f46;padding:10px;">
+              width:180px; height:84px;
+            </div>
+            <div class="code">div { width: 180px; height: 84px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { width: 180px; height: 84px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Prefer flexible units (%, vw, rem) for responsive UIs.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">box-sizing</div>
+            <div class="demo" title="box-sizing: border-box includes padding & border in size" style="width:200px;padding:16px;border:4px solid rgba(255,255,255,0.06);box-sizing:border-box;background:#0ea5a4;color:#021">
+              border-box
+            </div>
+            <div class="code">* { box-sizing: border-box; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('* { box-sizing: border-box; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Set this globally to make sizing intuitive (elements include padding & border in their width/height).</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">padding &amp; margin</div>
+            <div class="demo" title="Padding: inside space; Margin: outside space" style="padding:18px;margin:8px;background:#7c3aed;color:#fff;height:auto;">
+              padding:18px; margin:8px;
+            </div>
+            <div class="code">div { padding: 18px; margin: 8px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { padding: 18px; margin: 8px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Shorthand: padding: top right bottom left; Use logical properties (padding-inline, padding-block) for internationalization.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">border &amp; border-radius</div>
+            <div class="demo" title="Border and rounded corners" style="border:3px solid #eab308;border-radius:12px;padding:12px;color:#fff;background:transparent;">
+              border:3px solid; border-radius:12px
+            </div>
+            <div class="code">div { border: 3px solid #eab308; border-radius: 12px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { border: 3px solid #eab308; border-radius: 12px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use border-radius for pill buttons and shapes. Accepts 1-4 values or / for elliptical corners.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">box-shadow &amp; outline</div>
+            <div class="demo" title="box-shadow adds shading; outline doesn't affect layout" style="box-shadow: 0 10px 30px rgba(2,6,23,0.6);padding:10px;border-radius:8px;background:#111827;color:#fff;">
+              shadow & outline
+            </div>
+            <div class="code">div { box-shadow: 0 10px 30px rgba(0,0,0,0.5); outline: 2px solid rgba(99,102,241,0.25); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use multiple shadows for layered depth. outline is useful for focus states and doesn't change element size.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- POSITIONING & LAYOUT -->
+      <section id="position">
+        <h2>Positioning &amp; Layout</h2>
+        <p class="intro">How elements are laid out on the page — flow, stacking, and advanced clipping.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">display</div>
+            <div class="demo" title="display controls box behavior: block, inline, inline-block, none, flex, grid" style="display:inline-block;padding:10px;background:#ef4444;border-radius:8px;">
+              display: inline-block;
+            </div>
+            <div class="code">div { display: inline-block; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { display: inline-block; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>display value determines layout model. Use display:flex/grid for modern layouts. display:none hides an element from layout and accessibility tree unless aria-hidden used carefully.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">position, top/right/bottom/left</div>
+            <div class="demo" title="position: relative/absolute/fixed/sticky with offsets" style="position:relative;padding:10px;background:#1e293b;border-radius:8px;">
+              relative / absolute / sticky
+            </div>
+            <div class="code">.box { position: relative; } .box .child { position: absolute; top: 10px; right: 10px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.box { position: relative; } .box .child { position: absolute; top: 10px; right: 10px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>position:sticky is useful for headers that stick within a scroll container. fixed positions relative to viewport.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">z-index</div>
+            <div class="demo" title="Controls stacking order (higher number on top)." style="position:relative;background:#0ea5a4;padding:8px;border-radius:8px;">
+              z-index
+            </div>
+            <div class="code">.front { z-index: 10; position: relative; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.front { z-index: 10; position: relative; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>z-index works on positioned elements (position other than static). New stacking contexts can be created by transforms, opacity less than 1, and certain properties.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">float &amp; clear</div>
+            <div class="demo" title="float: allows content wrap; clear stops wrapping" style="background:#7c3aed;padding:8px;border-radius:6px;color:#fff;">
+              float: left;
+            </div>
+            <div class="code">.img { float: left; margin-right: 12px; } .clearfix::after { content: ''; display: table; clear: both; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode".img { float: left; margin-right: 12px; } .clearfix::after { content: \"\"; display: table; clear: both; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Float is legacy for layouts; prefer flex and grid. Use clearfix to clear floats in a container.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">overflow &amp; clip-path</div>
+            <div class="demo" title="overflow controls content clipping; clip-path cuts into shapes" style="overflow:hidden;clip-path:polygon(10% 0%, 90% 0, 100% 100%, 0% 100%);background:#f97316;padding:8px;border-radius:6px;">
+              clip-path + overflow
+            </div>
+            <div class="code">.card { overflow: auto; clip-path: polygon(...); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.card { overflow: auto; clip-path: polygon(10% 0%, 90% 0, 100% 100%, 0% 100%); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>clip-path is great for creative shapes; use SVG clipPath for complex shapes. overflow:auto adds scrollbars when needed.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FLEXBOX -->
+      <section id="flex">
+        <h2>Flexbox</h2>
+        <p class="intro">One-dimensional layout model for arranging items in a row or column. Great for navs, toolbars, and smaller layouts.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">display: flex</div>
+            <div class="demo" title="Creates a flex container; children become flex items." style="display:flex;gap:8px;align-items:center;justify-content:center;background:#111827;padding:8px;border-radius:8px;height:84px;">
+              <div style="background:#ef4444;padding:8px;border-radius:6px;">1</div>
+              <div style="background:#f59e0b;padding:8px;border-radius:6px;">2</div>
+              <div style="background:#60a5fa;padding:8px;border-radius:6px;">3</div>
+            </div>
+            <div class="code">.row { display: flex; gap: 8px; align-items: center; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.row { display: flex; gap: 8px; align-items: center; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Flexbox is ideal for 1D layouts. Use gap for spacing (supported in modern browsers).</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">flex-direction &amp; flex-wrap</div>
+            <div class="demo" title="Direction and wrapping control" style="display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;background:#0f172a;padding:8px;border-radius:8px;height:84px;">
+              <div style="background:#7c3aed;padding:6px;border-radius:6px;">A</div>
+              <div style="background:#06b6d4;padding:6px;border-radius:6px;">B</div>
+              <div style="background:#fde047;padding:6px;border-radius:6px;">C</div>
+            </div>
+            <div class="code">.wrap { display:flex; flex-direction: row; flex-wrap: wrap; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.wrap { display:flex; flex-direction: row; flex-wrap: wrap; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use column/row-reverse when needed. gap works for both row and column spacing.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">justify-content &amp; align-items</div>
+            <div class="demo" title="Main axis (justify) and cross axis (align) alignment" style="display:flex;justify-content:space-between;align-items:center;background:#02111b;padding:12px;border-radius:8px;height:84px;color:#fff;">
+              <div style="background:#ef4444;padding:6px;border-radius:6px;">Left</div>
+              <div style="background:#34d399;padding:6px;border-radius:6px;">Center</div>
+              <div style="background:#60a5fa;padding:6px;border-radius:6px;">Right</div>
+            </div>
+            <div class="code">.row { justify-content: space-between; align-items: center; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.row { justify-content: space-between; align-items: center; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>justify-content: controls distribution along main axis. align-items: controls cross-axis alignment.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">flex (shorthand) &amp; order</div>
+            <div class="demo" title="flex: grow shrink basis; controls how items resize" style="display:flex;gap:8px;background:#071129;padding:10px;border-radius:8px;height:84px;">
+              <div style="background:#ef4444;padding:6px;border-radius:6px;flex:1;">flex:1</div>
+              <div style="background:#60a5fa;padding:6px;border-radius:6px;flex:2;">flex:2</div>
+            </div>
+            <div class="code">.item { flex: 1 1 0%; } .item-large { flex: 2; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.item { flex: 1 1 0%; } .item-large { flex: 2; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>flex: <grow> <shrink> <basis>. Common shorthand: flex:1 to evenly distribute space.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- GRID -->
+      <section id="grid">
+        <h2>Grid</h2>
+        <p class="intro">Two-dimensional layout for rows and columns. Powerful for page-level layouts and complex components.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">display: grid</div>
+            <div class="demo" title="Creates a grid container with tracks." style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:#071a2a;padding:8px;border-radius:8px;height:84px;">
+              <div style="background:#f97316;padding:6px;border-radius:6px;">1</div>
+              <div style="background:#60a5fa;padding:6px;border-radius:6px;">2</div>
+              <div style="background:#34d399;padding:6px;border-radius:6px;">3</div>
+            </div>
+            <div class="code">.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Grid excels at 2D layout (rows + columns). Use grid-template-areas for named placement.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">grid-template / gap</div>
+            <div class="demo" title="Define tracks and gaps between cells" style="display:grid;grid-template-columns: 120px 1fr;gap:8px;background:#071129;padding:8px;border-radius:8px;height:84px;">
+              <div style="background:#7c3aed;padding:6px;border-radius:6px;">left</div>
+              <div style="background:#06b6d4;padding:6px;border-radius:6px;">main</div>
+            </div>
+            <div class="code">.layout { grid-template-columns: 120px 1fr; gap: 12px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.layout { grid-template-columns: 120px 1fr; gap: 12px; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use auto-fill / auto-fit with minmax() to create responsive grid columns.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">grid-column / grid-row</div>
+            <div class="demo" title="Place items using grid-column and grid-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#071a2a;padding:8px;border-radius:8px;height:84px;">
+              <div style="grid-column: span 2; background:#f97316;padding:6px;border-radius:6px;">span 2</div>
+              <div style="background:#60a5fa;padding:6px;border-radius:6px;">1</div>
+            </div>
+            <div class="code">.hero { grid-column: 1 / -1; } .item { grid-column: span 2; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.item { grid-column: span 2; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use line numbers, span keyword, and -1 to refer to the end line. grid-auto-flow controls placement order.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ADVANCED VISUALS -->
+      <section id="visuals">
+        <h2>Advanced Visual Effects</h2>
+        <p class="intro">Filters, blending, masks, and visual layers that give modern depth and polish.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">opacity</div>
+            <div class="demo" title="Controls transparency (0-1)" style="opacity:0.85;background:#ef4444;padding:10px;border-radius:8px;">
+              opacity: 0.85
+            </div>
+            <div class="code">div { opacity: 0.85; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('div { opacity: 0.85; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Opacity affects the element and its children. For backdrop blurs, use rgba backgrounds and backdrop-filter.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">filter</div>
+            <div class="demo" title="Applies visual effects like blur/contrast/hue-rotate" style="filter: grayscale(100%);background:linear-gradient(90deg,#60a5fa,#a78bfa);">
+              grayscale(100%)
+            </div>
+            <div class="code">img { filter: grayscale(100%) blur(2px) contrast(1.1); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('img { filter: grayscale(100%); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Multiple filter functions can be chained. Filters can be GPU-accelerated in many browsers.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">backdrop-filter</div>
+            <div class="demo" title="Applies effects to the area behind an element (glass effect)" style="background: rgba(255,255,255,0.06);backdrop-filter: blur(6px);border-radius:8px;padding:8px;color:#fff;">
+              backdrop-filter: blur(6px)
+            </div>
+            <div class="code">.glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(6px); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(6px); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Not supported in older browsers. Often used with semi-transparent backgrounds to create glassmorphism.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">mix-blend-mode</div>
+            <div class="demo" title="Blend element with background using blend modes like multiply" style="background: linear-gradient(90deg,#f97316,#60a5fa);mix-blend-mode: screen;padding:8px;border-radius:8px;">
+              mix-blend-mode: screen
+            </div>
+            <div class="code">.badge { mix-blend-mode: screen; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.badge { mix-blend-mode: screen; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Great for layered UI and hero sections. Can create surprising results; test on multiple backgrounds.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">mask-image</div>
+            <div class="demo" title="Mask an element using an image or gradient" style="-webkit-mask-image: linear-gradient(to right, transparent, black); mask-image: linear-gradient(to right, transparent, black);background:#34d399;padding:8px;border-radius:6px;">
+              mask-image gradient
+            </div>
+            <div class="code">.fade { mask-image: linear-gradient(to right, transparent, black); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.fade { mask-image: linear-gradient(to right, transparent, black); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>mask-image hides parts of an element. Use SVG masks for precise shapes and alpha control.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">object-fit &amp; object-position</div>
+            <div class="demo" title="Controls how replaced content (img, video) fits its box" style="background:#111827;padding:8px;border-radius:6px;">
+              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='84'><rect width='100%' height='100%' fill='%23f97316'/><text x='50%' y='50%' font-size='16' dominant-baseline='middle' text-anchor='middle' fill='white'>object-fit: cover</text></svg>" alt="img" style="width:100%;height:64px;object-fit:cover;border-radius:6px;"/>
+            </div>
+            <div class="code">img { width: 100%; height: 200px; object-fit: cover; object-position: center; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('img { object-fit: cover; object-position: center; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>object-fit: cover preserves aspect ratio while filling the container. Use for responsive image containers.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TRANSFORM & ANIMATION -->
+      <section id="transform">
+        <h2>Transformations &amp; Animations</h2>
+        <p class="intro">Transforms let you move and rotate elements; transitions and animations add motion and life.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">transform &amp; transform-origin</div>
+            <div class="demo" title="Rotate and scale using transform; transform-origin sets pivot." style="transform: rotate(-6deg) scale(1.02);transform-origin:center;background:#ef4444;padding:10px;border-radius:6px;">
+              rotate(-6deg) scale(1.02)
+            </div>
+            <div class="code">.logo { transform: rotate(-6deg) scale(1.02); transform-origin: center; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.logo { transform: rotate(-6deg) scale(1.02); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Transforms do not affect document flow; they create new stacking contexts in some cases.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">transition</div>
+            <div class="demo" title="Animate property changes smoothly on hover" style="transition: transform 300ms ease, box-shadow 300ms ease;background:#60a5fa;padding:12px;border-radius:8px;" onmouseover="this.style.transform='scale(1.06)';this.style.boxShadow='0 12px 30px rgba(2,6,23,0.6)';" onmouseout="this.style.transform='none';this.style.boxShadow='none';">
+              hover to animate
+            </div>
+            <div class="code">.btn { transition: transform 300ms ease; } .btn:hover { transform: scale(1.06); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.btn { transition: transform 300ms ease; } .btn:hover { transform: scale(1.06); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Transition only animates changes; use for hover/active state transitions for smoother UI.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">animation &amp; @keyframes</div>
+            <div class="demo" title="Keyframed animation example" style="background:#7c3aed;padding:8px;border-radius:8px;">
+              <div style="width:56px;height:24px;background:#fff;border-radius:6px;margin:0 auto;animation: bounce 900ms infinite alternate;"> </div>
+            </div>
+            <div class="code">@keyframes bounce { to { transform: translateY(-10px); } } .dot { animation: bounce 900ms infinite alternate; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('@keyframes bounce { to { transform: translateY(-10px); } } .dot { animation: bounce 900ms infinite alternate; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use animation-duration, iteration-count, timing-function, delay, and direction. Prefer reduced-motion media query for accessibility.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">perspective</div>
+            <div class="demo" title="3D perspective on child transforms" style="perspective: 600px;background:#02111b;padding:10px;border-radius:8px;">
+              <div style="width:60px;height:60px;background:#f59e0b;margin:0 auto;transform: rotateY(25deg) translateZ(10px);"> </div>
+            </div>
+            <div class="code">.scene { perspective: 600px; } .card { transform: rotateY(25deg); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.scene { perspective: 600px; } .card { transform: rotateY(25deg); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Perspective gives depth for 3D transforms; perspective-origin controls the vanishing point.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- LISTS & TABLES -->
+      <section id="lists">
+        <h2>Lists &amp; Tables</h2>
+        <p class="intro">Styling lists and tables for readable content and data display.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">list-style</div>
+            <div class="demo" title="Controls bullets and images for lists" style="background:#071129;padding:12px;border-radius:8px;height:84px;">
+              <ul style="margin:0;padding-left:18px;color:#fff;"><li>disc</li><li>circle</li></ul>
+            </div>
+            <div class="code">ul { list-style-type: disc; list-style-position: inside; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('ul { list-style-type: disc; list-style-position: inside; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use custom list images with list-style-image or pseudo-elements for richer designs.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">table layout</div>
+            <div class="demo" title="border-collapse and spacing for tables" style="background:#0b1220;padding:8px;border-radius:8px;height:84px;">
+              <table style="width:100%;border-collapse:collapse;color:#fff;">
+                <tr><td style="border:1px solid rgba(255,255,255,0.04);padding:4px;">A</td><td style="border:1px solid rgba(255,255,255,0.04);padding:4px;">B</td></tr>
+              </table>
+            </div>
+            <div class="code">table { border-collapse: collapse; border-spacing: 0; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('table { border-collapse: collapse; border-spacing: 0; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Tables are for tabular data — avoid using them for layout. Use aria attributes for accessibility.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RESPONSIVE -->
+      <section id="responsive">
+        <h2>Responsive Design &amp; Media Queries</h2>
+        <p class="intro">Make layouts adapt using queries, responsive units, and modern functions.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">@media</div>
+            <div class="demo" title="Apply styles conditionally based on viewport." style="background:#065f46;padding:10px;border-radius:8px;color:#fff;">
+              @media (max-width: 600px)
+            </div>
+            <div class="code">@media (max-width: 600px) { .nav { display: none; } }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('@media (max-width: 600px) { .nav { display: none; } }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use mobile-first approach (min-width) for easier scaling. Use feature queries (@supports) for progressive enhancement.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">clamp(), min(), max()</div>
+            <div class="demo" title="Clamp for fluid sizing: clamp(min, preferred, max)" style="background:#0b1220;padding:12px;border-radius:8px;color:#fff;">
+              font-size: clamp(1rem, 2.5vw, 1.5rem)
+            </div>
+            <div class="code">h1 { font-size: clamp(1rem, 2.5vw, 1.5rem); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('h1 { font-size: clamp(1rem, 2.5vw, 1.5rem); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>clamp() helps create fluid yet constrained sizes without media queries. Useful for typography.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">@supports</div>
+            <div class="demo" title="Feature queries to test browser support." style="background:#7c3aed;padding:8px;border-radius:8px;color:#fff;">
+              @supports(display: grid)
+            </div>
+            <div class="code">@supports (display: grid) { .layout { display: grid; } }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('@supports (display: grid) { .layout { display: grid; } }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Useful for progressive enhancement: only apply modern features when the browser supports them.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VARIABLES & CALC -->
+      <section id="vars">
+        <h2>Variables &amp; calc()</h2>
+        <p class="intro">Custom properties let you create themeable, dynamic CSS. calc() performs math inside CSS.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">CSS Custom Properties</div>
+            <div class="demo" title="Define reusable values with --var and use with var()" style="background:linear-gradient(90deg,#06b6d4,#7c3aed);padding:10px;border-radius:8px;color:#021;">
+              --accent: #06b6d4;
+            </div>
+            <div class="code">:root { --accent: #06b6d4; } .btn { background: var(--accent); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode(':root { --accent: #06b6d4; } .btn { background: var(--accent); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Custom properties are dynamic and can be updated at runtime (JS or via media queries). Great for themes.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">calc() &amp; units</div>
+            <div class="demo" title="Use calc for mixing units (100% - 2rem)" style="background:#02111b;padding:10px;border-radius:8px;color:#fff;">
+              width: calc(100% - 48px)
+            </div>
+            <div class="code">.main { width: calc(100% - 48px); }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.main { width: calc(100% - 48px); }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>calc() lets you combine px, %, vw, rem etc. Useful for precise responsive layouts.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PSEUDO -->
+      <section id="pseudo">
+        <h2>Pseudo-classes &amp; Pseudo-elements</h2>
+        <p class="intro">Target UI states and insert content or decorative elements without extra HTML.</p>
+        <div class="props">
+
+          <div class="prop">
+            <div class="title">:hover, :focus, :active</div>
+            <div class="demo" title=":hover, :focus, :active control interaction states" style="background:#ef4444;padding:12px;border-radius:8px;color:#fff;">
+              :hover / :focus
+            </div>
+            <div class="code">.btn:hover { transform: scale(1.03); } .btn:focus { outline: 2px solid #60a5fa; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('.btn:hover { transform: scale(1.03); } .btn:focus { outline: 2px solid #60a5fa; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Use :focus-visible for keyboard focus. Prefer visible focus styles for accessibility.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">::before &amp; ::after</div>
+            <div class="demo" title="Insert decorative content using pseudo-elements" style="position:relative;background:#0b1220;padding:12px;border-radius:8px;color:#fff;">
+              <span style="position:relative;z-index:2;">Badge</span>
+              <span style="position:absolute;left:8px;top:8px;z-index:1;opacity:0.06;">★</span>
+            </div>
+            <div class="code">.btn::after { content: '»'; margin-left: 8px; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode".btn::after { content: \"»\"; margin-left: 8px; }>Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Pseudo-elements let you add cosmetic content and shape elements without extra markup.</p>
+              </details></div>
+          </div>
+
+          <div class="prop">
+            <div class="title">Structural selectors (:nth-child etc.)</div>
+            <div class="demo" title=":nth-child styles elements based on position" style="background:#071129;padding:12px;border-radius:8px;color:#fff;">
+              <ol style="margin:0;padding-left:18px;"><li>One</li><li>Two</li><li>Three</li></ol>
+            </div>
+            <div class="code">li:nth-child(odd) { background: #0b1220; }</div>
+            <div class="controls"><button class="btn" onclick="copyCode('li:nth-child(odd) { background: #0b1220; }')">Copy</button>
+              <details><summary class="small">Details</summary>
+                <p>Great for styling alternate rows, first/last elements, and complex selection patterns.</p>
+              </details></div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toast">Copied ✓</div>
+
+  <script>
+    // copy helper
+    function copyCode(text){
+      navigator.clipboard.writeText(text).then(()=>{
+        const t=document.getElementById('toast');
+        t.style.display='block';
+        setTimeout(()=>t.style.display='none',1200);
+      }).catch(()=>alert('Copy failed — your browser might block clipboard access.'))
+    }
+
+    // search filter
+    const search=document.getElementById('search');
+    const props=document.querySelectorAll('.prop');
+    search.addEventListener('input',()=>{
+      const q=search.value.trim().toLowerCase();
+      props.forEach(p=>{
+        const title=p.querySelector('.title').innerText.toLowerCase();
+        const code=p.querySelector('.code').innerText.toLowerCase();
+        const details=p.querySelector('details')?.innerText.toLowerCase()||'';
+        const match = q === '' || title.includes(q) || code.includes(q) || details.includes(q);
+        p.style.display = match ? '' : 'none';
+      })
+    });
+    document.getElementById('clearSearch').addEventListener('click',()=>{search.value='';search.dispatchEvent(new Event('input'))});
+
+    // enable keyboard copy for focused code blocks (Ctrl+C)
+    document.addEventListener('keydown',(e)=>{
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='c'){
+        const sel=window.getSelection().toString();
+        if(sel) navigator.clipboard.writeText(sel);
+      }
+    })
+
+    // Accessibility: make details keyboard friendly
+    document.querySelectorAll('details summary').forEach(s=>s.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' ') s.parentElement.open=!s.parentElement.open }))
+  </script>
+</body>
+</html>

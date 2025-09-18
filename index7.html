@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Decoration Playground</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset default browser styles for consistency */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box; /* Ensures padding & border don't increase element size */
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif; /* Clean, modern font for body */
+      background-color: #f4f4f4; /* Light background for contrast */
+      color: #333; /* Dark text for readability */
+      line-height: 1.6; /* Improves text spacing */
+    }
+
+    /* ===== Navbar ===== */
+    nav {
+      background-color: #0A192F; /* Navy blue background */
+      padding: 1rem 2rem; /* Space inside navbar */
+      display: flex; /* Places items in a row */
+      justify-content: space-between; /* Space between logo & links */
+      align-items: center; /* Vertically center items */
+      position: sticky; /* Stays at top when scrolling */
+      top: 0; /* Position sticky's reference point */
+      z-index: 1000; /* Keeps navbar above other content */
+    }
+
+    nav a {
+      color: white; /* White text */
+      text-decoration: none; /* Remove underline */
+      margin: 0 1rem; /* Space between links */
+      font-family: 'Poppins', sans-serif; /* Bold, modern font for headings */
+      transition: color 0.3s ease, border-bottom 0.3s ease; /* Smooth hover animation */
+    }
+
+    nav a:hover {
+      color: #00ADB5; /* Accent color on hover */
+      border-bottom: 2px solid #00ADB5; /* Underline effect */
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      text-align: center; /* Center text */
+      padding: 3rem 1rem; /* Space around hero */
+      background: linear-gradient(135deg, #00ADB5, #007F85); /* Gradient background */
+      color: white; /* White text for contrast */
+      animation: fadeIn 1s ease forwards; /* Fade-in effect */
+    }
+
+    .hero h1 {
+      font-size: 2.5rem; /* Large heading */
+      font-family: 'Poppins', sans-serif; /* Stylish font */
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    /* ===== Cards Section ===== */
+    .container {
+      display: grid; /* Creates a grid layout */
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+      gap: 1.5rem; /* Space between cards */
+      padding: 2rem; /* Space inside section */
+      max-width: 1200px; /* Restrict width for readability */
+      margin: auto; /* Center container */
+    }
+
+    .card {
+      background: white; /* White background */
+      border-radius: 12px; /* Rounded corners */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Soft shadow */
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover animation */
+    }
+
+    .card:hover {
+      transform: translateY(-8px); /* Lift effect */
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* Deeper shadow */
+    }
+
+    /* ===== Animation Keyframes ===== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0; /* Invisible */
+        transform: translateY(20px); /* Moved down */
+      }
+      to {
+        opacity: 1; /* Visible */
+        transform: translateY(0); /* Normal position */
+      }
+    }
+
+    /* ===== Responsive Navbar for small screens ===== */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column; /* Stack items vertically */
+      }
+      nav a {
+        margin: 0.5rem 0; /* Add spacing between stacked links */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navbar ===== -->
+  <nav>
+    <div class="logo">
+      <a href="#">MySite</a>
+    </div>
+    <div class="links">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Projects</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="hero">
+    <h1>Welcome to My Website</h1>
+    <p>Beautiful, modern, and interactive design using CSS</p>
+  </section>
+
+  <!-- ===== Cards Section ===== -->
+  <section class="container">
+    <div class="card">
+      <h2>Card One</h2>
+      <p>This card has a hover effect that lifts it and adds a deeper shadow.</p>
+    </div>
+    <div class="card">
+      <h2>Card Two</h2>
+      <p>Responsive layout ensures cards adjust to fit any screen size.</p>
+    </div>
+    <div class="card">
+      <h2>Card Three</h2>
+      <p>Clean typography and consistent spacing give a professional look.</p>
+    </div>
+  </section>
+
+</body>
+</html>

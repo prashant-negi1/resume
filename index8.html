@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Your Name — Portfolio</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600&display=swap" rel="stylesheet">
+<style>
+  /* ===========================
+     VARIABLES / THEME
+     =========================== */
+  :root{
+    --bg: #0f1724;            /* dark background */
+    --card: #0b1220;          /* card / navbar bg */
+    --muted: #98a0b3;         /* muted text */
+    --text: #e6eef7;          /* main text */
+    --accent: #00CFB6;        /* primary accent */
+    --glass: rgba(255,255,255,0.03);
+    --glass-2: rgba(255,255,255,0.02);
+    --radius: 12px;
+    --ease: cubic-bezier(.2,.9,.25,1);
+    --t: 350ms;               /* default microinteraction duration */
+  }
+
+  /* Respect reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    :root { --t: 50ms; }
+    * { transition-duration: 50ms !important; animation-duration: 50ms !important; animation-iteration-count: 1 !important; }
+  }
+
+  /* ===========================
+     GLOBAL
+     =========================== */
+  *{ box-sizing: border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background: linear-gradient(180deg,var(--bg), #07101a 140%);
+    color:var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.45;
+    padding-bottom:80px;
+  }
+  a{ color:inherit; text-decoration:none; }
+
+  .container{
+    max-width:1100px;
+    margin:0 auto;
+    padding:28px 20px;
+  }
+
+  h1,h2,h3 { margin:0 0 12px 0; font-weight:600; color:var(--text); }
+  p { margin:0 0 12px 0; color:var(--muted); }
+
+  /* ===========================
+     NAVBAR
+     =========================== */
+  .nav-wrap{
+    position:sticky;
+    top:16px;
+    z-index:40;
+    padding:10px 0;
+  }
+  nav.nav{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 18px;
+    background: linear-gradient(180deg,var(--card), rgba(6,10,16,0.6));
+    border-radius:14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+  .brand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .logo{
+    width:44px; height:44px; border-radius:10px;
+    background: linear-gradient(135deg,var(--accent), #00A089);
+    display:grid; place-items:center;
+    font-weight:800; color:#021217;
+    box-shadow: 0 6px 20px rgba(0,207,182,0.12);
+  }
+  .brand h3{ font-family: "Poppins"; font-size:18px; color:var(--text); margin:0; }
+  /* Desktop links */
+  .nav-links{
+    display:flex; align-items:center; gap:8px;
+  }
+  .nav-links a{
+    position:relative;
+    padding:8px 12px;
+    color:var(--text);
+    border-radius:8px;
+    font-weight:600;
+    font-size:14px;
+    transition: transform var(--t) var(--ease), color var(--t) var(--ease), background var(--t) var(--ease);
+  }
+  /* simple underline animation (scaleX) */
+  .nav-links a::after{
+    content:""; position:absolute; left:10%; right:10%; bottom:6px; height:2px;
+    background:var(--accent); transform:scaleX(0); transform-origin:left; border-radius:2px;
+    transition: transform var(--t) var(--ease);
+    opacity:0.95;
+  }
+  .nav-links a:hover{ color:var(--accent); transform:translateY(-3px); }
+  .nav-links a:hover::after{ transform:scaleX(1); }
+
+  /* CTA style */
+  .cta{
+    background: linear-gradient(90deg,var(--accent), #00A089);
+    color:#021217;
+    padding:9px 14px;
+    border-radius:10px;
+    box-shadow: 0 8px 28px rgba(0,207,182,0.08);
+    font-weight:700;
+  }
+  .cta:hover{ transform:translateY(-4px) scale(1.02); }
+
+  /* Hamburger */
+  .hamburger{
+    display:none; width:42px; height:42px; border-radius:8px; align-items:center; justify-content:center;
+    background:transparent; border:1px solid rgba(255,255,255,0.02);
+    cursor:pointer;
+  }
+  .hamburger div{ width:20px; height:2px; background:var(--text); margin:3px 0; border-radius:2px; transition: all var(--t) var(--ease); }
+
+  /* small screen behavior */
+  @media (max-width:900px){
+    .nav-links{ display:none; position:absolute; right:18px; top:72px; background:var(--card); padding:12px; flex-direction:column; gap:6px; border-radius:10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-width:170px; }
+    .nav-links.show{ display:flex; animation: slideDown 260ms var(--ease) both; }
+    @keyframes slideDown { from{ transform: translateY(-6px); opacity:0 } to{ transform:none; opacity:1 } }
+    .hamburger{ display:flex }
+  }
+
+  /* ===========================
+     HERO / LANDING (two-column)
+     =========================== */
+  .hero{
+    display:grid;
+    grid-template-columns: 1fr 320px;
+    gap:28px;
+    align-items:start;
+    margin-top:26px;
+  }
+  @media (max-width:900px){
+    .hero{ grid-template-columns: 1fr; }
+  }
+
+  .hero-left{
+    padding:28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 30px rgba(2,6,10,0.6);
+  }
+  .hi{ color:var(--accent); font-weight:700; letter-spacing:0.6px; font-size:14px; margin-bottom:14px; display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(0,207,182,0.06); }
+  .name{ font-size:40px; line-height:1; font-family: "Poppins"; margin-bottom:8px; }
+  .desc{ color:var(--muted); max-width:700px; font-size:16px; }
+
+  .hero-right{
+    background: linear-gradient(180deg,var(--glass), transparent);
+    border-radius:14px; padding:18px;
+    position:sticky; top:96px; height:max-content;
+    border: 1px solid rgba(255,255,255,0.02);
+  }
+  .contact-list{ display:flex; flex-direction:column; gap:12px; align-items:stretch; }
+  .contact-item{
+    display:flex; align-items:center; gap:12px; padding:10px; border-radius:10px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+    transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease), background var(--t) var(--ease);
+  }
+  .contact-item:hover{ transform:translateY(-6px); box-shadow: 0 18px 30px rgba(0,0,0,0.6); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+  .contact-icon{ width:40px; height:40px; border-radius:8px; display:grid; place-items:center; font-weight:700; color:#021217; background: linear-gradient(90deg,var(--accent), #00A089); }
+  .contact-text{ display:flex; flex-direction:column; }
+  .contact-text small{ color:var(--muted); font-size:12px; }
+  .contact-text span{ font-weight:600; color:var(--text) }
+
+  /* ===========================
+     SECTIONS: Skills, Certifications, Projects
+     =========================== */
+  section{ margin-top:36px; }
+
+  /* Skills grid */
+  .skills-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:14px;
+  }
+  @media (max-width:900px){ .skills-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width:520px){ .skills-grid{ grid-template-columns: 1fr; } }
+
+  .skill-card{
+    padding:14px; border-radius:12px; background: linear-gradient(180deg,var(--glass), var(--glass-2));
+    border: 1px solid rgba(255,255,255,0.02);
+    display:flex; flex-direction:column; gap:10px; min-height:110px;
+    transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
+    transform-origin:center;
+  }
+  .skill-card:hover{ transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+  .skill-head{ display:flex; justify-content:space-between; align-items:center; }
+  .skill-name{ font-weight:700; color:var(--text); }
+  .skill-bar{ width:100%; height:8px; background:rgba(255,255,255,0.04); border-radius:999px; overflow:hidden; }
+  .skill-fill{ height:100%; background: linear-gradient(90deg,var(--accent), #00A089); width:0%; transform-origin:left; transition: width 900ms var(--ease); }
+
+  /* Cards reveal when scrolled: small animation */
+  .reveal{ opacity:0; transform: translateY(14px); transition: opacity 520ms var(--ease), transform 520ms var(--ease); }
+  .reveal.visible{ opacity:1; transform:none; }
+
+  /* Certifications */
+  .cert-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:12px; }
+  @media (max-width:900px){ .cert-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width:520px){ .cert-grid{ grid-template-columns: 1fr; } }
+  .cert-card{
+    padding:12px; border-radius:12px; display:flex; gap:12px; align-items:center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border:1px solid rgba(255,255,255,0.02);
+    transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
+  }
+  .cert-card img{ height:44px; width:44px; object-fit:contain; border-radius:8px; background: rgba(0,0,0,0.12); padding:6px; }
+  .cert-card:hover{ transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+
+  /* Projects carousel */
+  .projects-wrap{
+    position:relative; overflow:hidden; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+    padding:18px; border:1px solid rgba(255,255,255,0.02);
+  }
+  .proj-track{
+    display:flex; gap:18px; transition: transform 600ms var(--ease);
+    will-change: transform;
+  }
+  .proj-card{
+    min-width:320px; max-width:340px; background: linear-gradient(180deg, #07101a, #071623);
+    border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,0.02);
+    box-shadow: 0 12px 30px rgba(2,6,10,0.6);
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .proj-meta{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .proj-title{ font-weight:700; font-size:16px; }
+  .proj-desc{ color:var(--muted); font-size:14px; flex:1; }
+  .proj-links{ display:flex; gap:8px; }
+
+  .proj-controls{ display:flex; gap:8px; justify-content:center; margin-top:12px; }
+  .pc-btn{ background:transparent; border:1px solid rgba(255,255,255,0.03); padding:8px 12px; border-radius:8px; cursor:pointer; color:var(--text); }
+  .pc-btn:hover{ transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,0.6); }
+
+  /* Testimonials */
+  .testi{ display:grid; grid-template-columns: repeat(2,1fr); gap:12px; margin-top:14px; }
+  @media (max-width:900px){ .testi{ grid-template-columns:1fr; } }
+  .testi-card{ padding:16px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border:1px solid rgba(255,255,255,0.02); }
+
+  /* Footer */
+  footer{ margin-top:40px; padding:22px; text-align:center; color:var(--muted); font-size:14px; }
+
+  /* small tweaks */
+  .muted{ color:var(--muted); font-size:14px; }
+  .spacer{ height:10px; }
+</style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- NAV -->
+    <div class="nav-wrap">
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">YN</div>
+          <div>
+            <h3>Your Name</h3>
+            <div class="muted" style="font-size:12px;">Frontend Developer — Problem Solver</div>
+          </div>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+          <a href="#skills">Skills</a>
+          <a href="#projects">Projects</a>
+          <a href="#certs">Certifications</a>
+          <a href="#education">Education</a>
+          <a href="#contact" class="cta">Contact</a>
+        </div>
+
+        <button class="hamburger" id="hamb" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle menu">
+          <div></div><div></div><div></div>
+        </button>
+      </nav>
+    </div>
+
+    <!-- HERO / LANDING -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="hi">Hello, I'm</div>
+        <div class="name">Your Full Name</div>
+        <div class="desc">A concise two-line intro describing who you are and what you build. Focus on impact: "I build fast, accessible web apps and love solving tough algorithmic problems."</div>
+
+        <div style="margin-top:18px;">
+          <a href="#projects" class="pc-btn">See projects</a>
+          <span style="display:inline-block;width:12px;"></span>
+          <a href="#contact" class="pc-btn">Get in touch</a>
+        </div>
+      </div>
+
+      <!-- CONTACT (right column) -->
+      <aside class="hero-right" id="contact">
+        <h3 style="margin-bottom:6px;">Contact</h3>
+        <p class="muted" style="margin-bottom:10px;">Quick links — click to open</p>
+
+        <div class="contact-list">
+          <!-- GitHub -->
+          <a class="contact-item" href="https://github.com/" target="_blank" rel="noopener noreferrer">
+            <div class="contact-icon" aria-hidden="true">
+              <!-- github svg -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M12 .5C5.648.5.5 5.648.5 12c0 5.088 3.292 9.404 7.865 10.933.576.106.785-.25.785-.556 0-.274-.01-1.001-.015-1.965-3.2.695-3.876-1.543-3.876-1.543-.523-1.328-1.278-1.682-1.278-1.682-1.045-.714.08-.699.08-.699 1.156.082 1.765 1.187 1.765 1.187 1.027 1.76 2.695 1.252 3.352.958.103-.745.402-1.252.733-1.54-2.555-.291-5.244-1.278-5.244-5.686 0-1.256.45-2.281 1.187-3.087-.118-.292-.515-1.47.112-3.063 0 0 .971-.311 3.18 1.182A11.02 11.02 0 0112 6.844c.984.005 1.976.133 2.905.391 2.207-1.493 3.176-1.182 3.176-1.182.63 1.593.234 2.77.115 3.062.74.806 1.186 1.83 1.186 3.087 0 4.419-2.694 5.39-5.258 5.675.413.355.78 1.06.78 2.136 0 1.543-.014 2.788-.014 3.17 0 .31.205.668.792.554C20.712 21.402 24 17.086 24 12 24 5.648 18.352.5 12 .5z"/></svg>
+            </div>
+            <div class="contact-text">
+              <small>GitHub</small>
+              <span>github.com/your-username</span>
+            </div>
+          </a>
+
+          <!-- LinkedIn -->
+          <a class="contact-item" href="https://linkedin.com/" target="_blank" rel="noopener noreferrer">
+            <div class="contact-icon" aria-hidden="true" style="background:linear-gradient(90deg,#0077B5,#005C9C);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path fill="currentColor" d="M4.98 3.5A2.49 2.49 0 002.5 5.99c0 1.37 1.11 2.5 2.48 2.5h.03c1.37 0 2.49-1.13 2.49-2.5A2.49 2.49 0 004.98 3.5zM3.5 8.75h3v11.75h-3V8.75zM9.25 8.75h2.85v1.61h.04c.4-.76 1.38-1.62 2.84-1.62 3.04 0 3.6 2 3.6 4.59v6.77h-3v-6.01c0-1.43-.03-3.27-2-3.27-2 0-2.31 1.56-2.31 3.17v6.11h-3V8.75z"/></svg>
+            </div>
+            <div class="contact-text">
+              <small>LinkedIn</small>
+              <span>linkedin.com/in/your-username</span>
+            </div>
+          </a>
+
+          <!-- Email -->
+          <a class="contact-item" href="mailto:you@example.com">
+            <div class="contact-icon" aria-hidden="true" style="background:linear-gradient(90deg,#FFB86B,#FF7A7A);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path fill="currentColor" d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <div class="contact-text">
+              <small>Email</small>
+              <span>you@example.com</span>
+            </div>
+          </a>
+
+          <!-- Phone -->
+          <a class="contact-item" href="tel:+911234567890">
+            <div class="contact-icon" aria-hidden="true" style="background:linear-gradient(90deg,#7AD3FF,#5B8CFF);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path fill="currentColor" d="M6.6 10.79a9.05 9.05 0 004.58 4.58l1.86-1.86a1 1 0 01.95-.27 11.72 11.72 0 003.7.59 1 1 0 011 1V20a1 1 0 01-1 1A16 16 0 012 5a1 1 0 011-1h3.7a1 1 0 011 1c0 1.25.2 2.48.59 3.7a1 1 0 01-.27.95L6.6 10.8z"/></svg>
+            </div>
+            <div class="contact-text">
+              <small>Phone</small>
+              <span>+91 12345 67890</span>
+            </div>
+          </a>
+        </div>
+      </aside>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" aria-labelledby="skills-heading">
+      <div style="display:flex; justify-content:space-between; align-items:end;">
+        <div>
+          <h2 id="skills-heading">Skills</h2>
+          <p class="muted">A compact display of my technical strengths — hover to see the micro interactions.</p>
+        </div>
+      </div>
+
+      <div class="skills-grid" style="margin-top:12px;">
+        <!-- skill card example: change data-level attribute to set bar (0-100) -->
+        <div class="skill-card reveal" data-level="88">
+          <div class="skill-head">
+            <div class="skill-name">C++</div>
+            <div class="muted">Advanced</div>
+          </div>
+          <div class="skill-bar" aria-hidden="true"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">STL, OOP, Competitive programming</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="85">
+          <div class="skill-head">
+            <div class="skill-name">DSA</div>
+            <div class="muted">Advanced</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">Algorithms, Complexity, Problem solving</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="78">
+          <div class="skill-head">
+            <div class="skill-name">Java</div>
+            <div class="muted">Intermediate</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">OOP, Spring basics</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="82">
+          <div class="skill-head">
+            <div class="skill-name">JavaScript</div>
+            <div class="muted">Advanced</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">DOM, ES6+, Async</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="90">
+          <div class="skill-head">
+            <div class="skill-name">HTML & CSS</div>
+            <div class="muted">Expert</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">Responsive & semantic markup</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="75">
+          <div class="skill-head">
+            <div class="skill-name">Tailwind CSS</div>
+            <div class="muted">Intermediate</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">Utility-first styling</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="80">
+          <div class="skill-head">
+            <div class="skill-name">Version Control</div>
+            <div class="muted">Advanced</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">Git workflows, branching</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="88">
+          <div class="skill-head">
+            <div class="skill-name">Git & GitHub</div>
+            <div class="muted">Advanced</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">PRs, Actions basics</div>
+        </div>
+
+        <div class="skill-card reveal" data-level="70">
+          <div class="skill-head">
+            <div class="skill-name">Others</div>
+            <div class="muted">Familiar</div>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+          <div class="muted" style="font-size:13px;">Dev tools, testing basics</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section id="certs">
+      <h2>Certifications</h2>
+      <p class="muted">Selected certificates — hover to preview.</p>
+
+      <div class="cert-grid">
+        <div class="cert-card reveal">
+          <img src="https://via.placeholder.com/64?text=Coursera" alt="Coursera logo">
+          <div>
+            <div style="font-weight:700;">Certificate Name</div>
+            <div class="muted" style="font-size:13px;">Issuing Org — Year</div>
+          </div>
+        </div>
+
+        <div class="cert-card reveal">
+          <img src="https://via.placeholder.com/64?text=Udemy" alt="Udemy logo">
+          <div>
+            <div style="font-weight:700;">Another Cert</div>
+            <div class="muted" style="font-size:13px;">Issuing Org — Year</div>
+          </div>
+        </div>
+
+        <div class="cert-card reveal">
+          <img src="https://via.placeholder.com/64?text=Google" alt="Google logo">
+          <div>
+            <div style="font-weight:700;">Pro Certificate</div>
+            <div class="muted" style="font-size:13px;">Issuing Org — Year</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div style="display:flex; justify-content:space-between; align-items:end;">
+        <div>
+          <h2>Projects</h2>
+          <p class="muted">Click a project to view GitHub or live demo. Projects auto-slide with a 3s pause.</p>
+        </div>
+      </div>
+
+      <div class="projects-wrap" aria-roledescription="carousel">
+        <div class="proj-track" id="projTrack">
+          <!-- Example project cards -->
+          <div class="proj-card">
+            <div class="proj-meta">
+              <div class="proj-title">Project One</div>
+              <div class="muted">2024</div>
+            </div>
+            <div class="proj-desc">Short one-liner about project one — tech used: JS, HTML, CSS.</div>
+            <div style="display:flex; gap:8px;" class="proj-links">
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">Live</a>
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-meta">
+              <div class="proj-title">Project Two</div>
+              <div class="muted">2024</div>
+            </div>
+            <div class="proj-desc">Short one-liner about project two — backend + api.</div>
+            <div style="display:flex; gap:8px;" class="proj-links">
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">Live</a>
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-meta">
+              <div class="proj-title">Project Three</div>
+              <div class="muted">2023</div>
+            </div>
+            <div class="proj-desc">Short one-liner about project three — fullstack demo.</div>
+            <div style="display:flex; gap:8px;" class="proj-links">
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">Live</a>
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+
+          <!-- clone first cards to ensure smooth looping -->
+          <div class="proj-card">
+            <div class="proj-meta">
+              <div class="proj-title">Project One</div>
+              <div class="muted">2024</div>
+            </div>
+            <div class="proj-desc">Short one-liner about project one — tech used: JS, HTML, CSS.</div>
+            <div style="display:flex; gap:8px;" class="proj-links">
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">Live</a>
+              <a class="pc-btn" href="#" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-controls" aria-hidden="false" style="margin-top:12px;">
+          <button class="pc-btn" id="prevProj">Prev</button>
+          <button class="pc-btn" id="nextProj">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS / EXTRA -->
+    <section aria-labelledby="extra-heading">
+      <h2 id="extra-heading">Testimonials</h2>
+      <p class="muted">A couple short endorsements or achievements.</p>
+
+      <div class="testi">
+        <div class="testi-card reveal">
+          <div style="font-weight:700;">"Great to work with — delivered high quality code."</div>
+          <div class="muted" style="margin-top:8px;">— Manager at Company A</div>
+        </div>
+
+        <div class="testi-card reveal">
+          <div style="font-weight:700;">"Fast problem solver and excellent collaborator."</div>
+          <div class="muted" style="margin-top:8px;">— Team lead at Company B</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION (placeholder) -->
+    <section id="education" style="margin-top:28px;">
+      <h2>Education</h2>
+      <p class="muted">Your degree, college, and relevant details.</p>
+    </section>
+
+    <footer>
+      Built with ❤️ — Your Name • <span class="muted">© <span id="yr"></span></span>
+    </footer>
+
+  </div>
+
+<script>
+  // =========================
+  // NAV MENU (hamburger)
+  // =========================
+  (function(){
+    const hamb = document.getElementById('hamb');
+    const navLinks = document.getElementById('navLinks');
+    hamb.addEventListener('click', ()=>{
+      const shown = navLinks.classList.toggle('show');
+      hamb.setAttribute('aria-expanded', String(shown));
+    });
+    // close menu on nav link click (mobile)
+    navLinks.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click', ()=> navLinks.classList.remove('show'));
+    });
+  })();
+
+  // =========================
+  // SKILLS: animate fills when visible
+  // =========================
+  (function(){
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          const fill = entry.target.querySelector('.skill-fill');
+          const lvl = Number(entry.target.dataset.level || 70);
+          // animate width from 0 to level
+          fill.style.width = lvl + '%';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.skill-card.reveal').forEach(el=> observer.observe(el));
+  })();
+
+  // =========================
+  // Reveal generic small cards
+  // =========================
+  (function(){
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{
+        if(e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.18 });
+    revealEls.forEach(el=> obs.observe(el));
+  })();
+
+  // =========================
+  // PROJECTS: simple auto-slide carousel with 3s pause
+  // =========================
+  (function(){
+    const track = document.getElementById('projTrack');
+    const cards = track.querySelectorAll('.proj-card');
+    const cardCount = cards.length;
+    let index = 0;
+    const cardWidth = cards[0].offsetWidth + 18; // width + gap (approx)
+    // ensure track width fits
+    let autoTimer = null;
+
+    function goTo(i){
+      // clamp and translate
+      index = (i + cardCount) % cardCount;
+      track.style.transform = `translateX(${ - index * cardWidth }px)`;
+    }
+
+    function next(){
+      goTo(index + 1);
+    }
+    function prev(){
+      goTo(index - 1);
+    }
+
+    // buttons
+    document.getElementById('nextProj').addEventListener('click', ()=>{
+      pauseAuto();
+      next();
+    });
+    document.getElementById('prevProj').addEventListener('click', ()=>{
+      pauseAuto();
+      prev();
+    });
+
+    // auto play with 3s pause between slides
+    function startAuto(){
+      stopAuto();
+      autoTimer = setInterval(()=> next(), 3000 + 600); // 3s pause + transition allowance
+    }
+    function stopAuto(){ if(autoTimer) clearInterval(autoTimer); }
+    function pauseAuto(){ stopAuto(); setTimeout(startAuto, 4000); } // resume after short delay
+
+    // handle resize: recalc widths
+    window.addEventListener('resize', ()=>{
+      // recalc width
+      const w = track.querySelector('.proj-card').offsetWidth + 18;
+      // small guard
+      // we don't update cardWidth variable, but transform is applied on click & next
+    });
+
+    // init
+    startAuto();
+
+    // when user tabs away, pause auto to save CPU
+    document.addEventListener('visibilitychange', ()=>{
+      if(document.hidden) stopAuto(); else startAuto();
+    });
+  })();
+
+  // small helper: current year in footer
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+</script>
+</body>
+</html>

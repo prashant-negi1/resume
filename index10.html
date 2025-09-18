@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Anime Universe — Parallax Landing</title>
+
+<!-- GSAP + ScrollTrigger CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-c2Yg1xQ0I7p8v1vWvQY3zQ9oH5s4H0m9VjM8k1I8Y2nq5zbn0x2bN7m6Vq2uVvHqQvZ2z0rJ3rT2d9gB1m9zA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha512-0a1zqv1a8vS3E/7Zs0y6J8bCJ2rWq9fV3l8n2b1D0pQJr9uF7fQYbE0sV2wG5hH2jJf6zY9r0bY1c2N4zK8yQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  /* -------------------
+     Theme variables
+     ------------------- */
+  :root{
+    --bg-dark: #070615;
+    --accent: #ff6aa3;       /* pink accent */
+    --accent-2: #6ad0ff;     /* cyan */
+    --muted: #9aa4b2;
+    --card-bg: rgba(255,255,255,0.03);
+    --radius: 14px;
+    --ease: cubic-bezier(.2,.9,.2,1);
+  }
+
+  /* Reduced motion handling */
+  @media (prefers-reduced-motion: reduce){
+    * { scroll-behavior: auto !important; animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+
+  /* -------------------
+     Basic layout
+     ------------------- */
+  html,body{ height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background: var(--bg-dark); color:#fff; }
+  .wrap{ max-width:1200px; margin:0 auto; padding:28px; }
+
+  header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+  .brand{ display:flex; gap:12px; align-items:center; }
+  .logo{ width:48px;height:48px;border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:grid; place-items:center; color:#091217; font-weight:800; }
+  h1{ font-family:Poppins, sans-serif; margin:0; font-size:34px; letter-spacing:0.2px; }
+  p.lead{ margin:8px 0 0; color:var(--muted); }
+
+  /* -------------------
+     Fullscreen hero w/ parallax layers
+     ------------------- */
+  .hero {
+    position:relative;
+    height:85vh;
+    min-height:520px;
+    border-radius:20px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    margin-bottom:40px;
+  }
+
+  /* Parallax layers stacked absolutely.
+     Each layer will be moved by GSAP on scroll to create depth.
+     You can add image layers or gradient layers. */
+  .parallax-layer {
+    position:absolute; inset:0; background-position:center center; background-size:cover; pointer-events:none;
+  }
+  /* background base (furthest) */
+  .layer-bg { background: linear-gradient(180deg,#05040a 0%, #09101a 100%); filter: saturate(0.95) brightness(0.9); }
+
+  /* mid layer - soft nebula/texture (replaceable with image) */
+  .layer-mid {
+    background-image: radial-gradient(ellipse at 20% 20%, rgba(255,106,163,0.08), transparent 10%),
+                      radial-gradient(ellipse at 85% 80%, rgba(106,208,255,0.06), transparent 10%);
+    mix-blend-mode: screen;
+    transform-origin:center;
+    opacity:0.95;
+  }
+
+  /* foreground decorative shapes */
+  .layer-fore {
+    background-image: linear-gradient(135deg, rgba(255,106,163,0.08), rgba(106,208,255,0.06));
+    opacity:0.6;
+    filter: blur(40px);
+    transform: scale(1.05);
+  }
+
+  /* hero content layout */
+  .hero-inner{ position:relative; z-index:6; display:flex; justify-content:space-between; align-items:center; width:100%; padding:56px; gap:24px; }
+  .hero-left{ max-width:58%; }
+  .eyebrow { display:inline-block; background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:999px; color:var(--muted); margin-bottom:18px; font-weight:600; }
+  .hero-title { font-family:Poppins, sans-serif; font-size:48px; line-height:1; margin-bottom:14px; text-shadow: 0 6px 30px rgba(0,0,0,0.6); }
+  .hero-sub { color:var(--muted); font-size:18px; max-width:680px; }
+
+  /* hero-right: highlight single 3D card */
+  .hero-right{ width:420px; perspective:1200px; }
+  .main-card{
+    width:100%; border-radius:18px; overflow:hidden; background:var(--card-bg); border:1px solid rgba(255,255,255,0.03);
+    transform-style:preserve-3d; transition: transform 450ms var(--ease), box-shadow 450ms var(--ease);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.7);
+  }
+  .main-card .cover{ width:100%; height:380px; object-fit:cover; display:block; }
+  .main-card .caption{ padding:14px; display:flex; justify-content:space-between; align-items:center; }
+
+  /* tilt hint */
+  .hint { font-size:13px; color:var(--muted); }
+
+  /* -------------------
+     Cards section (rows of 3D cards)
+     ------------------- */
+  .cards-section{ margin-top:64px; display:grid; gap:26px; }
+  .cards-row{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+  .card {
+    width:300px; height:420px; border-radius:14px; overflow:hidden; background:var(--card-bg);
+    transform-style:preserve-3d; transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6); cursor:pointer;
+    will-change: transform;
+  }
+  .card img{ width:100%; height:72%; object-fit:cover; display:block; transform-origin:center; transition: transform 420ms var(--ease), filter 420ms var(--ease); }
+  .card .info{ padding:12px; }
+  .card h3{ margin:0 0 6px; font-size:18px; }
+  .card p{ margin:0; color:var(--muted); }
+
+  /* hover micro-interaction: glow + lift (still subtle) */
+  .card:hover{ transform: translateY(-12px) scale(1.02) rotateX(0.4deg); box-shadow: 0 36px 80px rgba(0,0,0,0.8); }
+  .card:hover img{ transform: scale(1.06); filter: saturate(1.05) brightness(1.02); }
+
+  /* -------------------
+     Section transitions: we will use GSAP ScrollTrigger to animate
+     ------------------- */
+  section.panel{ min-height:70vh; padding:56px; border-radius:16px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); margin-bottom:42px; }
+
+  /* responsive */
+  @media (max-width:980px){
+    .hero-inner{ flex-direction:column; align-items:flex-start; padding:28px; }
+    .hero-left{ max-width:100%; }
+    .hero-right{ width:100%; order:2; }
+    .main-card .cover{ height:300px; }
+    .card{ width:48%; height:360px; }
+  }
+  @media (max-width:560px){
+    .card{ width:100%; height:320px; }
+    .hero-title{ font-size:36px; }
+    .main-card .cover{ height:230px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <header>
+      <div class="brand">
+        <div class="logo">AN</div>
+        <div>
+          <div style="font-weight:700">Anime Universe</div>
+          <div class="lead">Parallax landing with 3D character cards</div>
+        </div>
+      </div>
+
+      <!-- music toggle -->
+      <div>
+        <button id="musicBtn" style="padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff;cursor:pointer;">
+          Music: Off
+        </button>
+      </div>
+    </header>
+
+    <!-- HERO + Parallax Layers -->
+    <section class="hero" id="hero">
+      <!-- layered backgrounds -->
+      <div class="parallax-layer layer-bg"></div>
+      <div class="parallax-layer layer-mid"></div>
+      <div class="parallax-layer layer-fore"></div>
+
+      <!-- content -->
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="eyebrow">Welcome to</div>
+          <div class="hero-title">Anime Universe</div>
+          <p class="hero-sub">Explore protagonists and antagonists in cinematic style. Tilt the cards to reveal depth — scroll to see section transitions and parallax depth.</p>
+        </div>
+
+        <div class="hero-right">
+          <!-- main 3D card (tilt effect) -->
+          <div class="main-card" id="mainCard" tabindex="0" aria-label="Main character card">
+            <!-- Replace this image with your protagonist image -->
+            <img src="https://images.unsplash.com/photo-1543832923-1d7a6b7c1b08?q=80&w=1400&auto=format&fit=crop" alt="Protagonist image" class="cover">
+            <div class="caption">
+              <div>
+                <strong>Akari — The Protagonist</strong>
+                <div class="hint">Tilt to explore</div>
+              </div>
+              <div style="color:var(--muted)">2024</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS SECTION 1 -->
+    <section class="panel" id="panel1">
+      <h2 style="margin-top:0;font-family:Poppins;">Protagonists</h2>
+      <p class="lead">Swipe or hover to tilt each card. Subtle animations enhance depth and focus.</p>
+
+      <div class="cards-section">
+        <div class="cards-row" id="row1">
+          <!-- Replace src with your images -->
+          <div class="card card-tilt" data-name="Hero 1">
+            <img src="https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b?q=80&w=1200&auto=format&fit=crop" alt="Hero 1">
+            <div class="info"><h3>Hero 1</h3><p>Brave & curious</p></div>
+          </div>
+
+          <div class="card card-tilt" data-name="Hero 2">
+            <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?q=80&w=1200&auto=format&fit=crop" alt="Hero 2">
+            <div class="info"><h3>Hero 2</h3><p>Stoic swordsman</p></div>
+          </div>
+
+          <div class="card card-tilt" data-name="Hero 3">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop" alt="Hero 3">
+            <div class="info"><h3>Hero 3</h3><p>Quiet strategist</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS SECTION 2 -->
+    <section class="panel" id="panel2">
+      <h2 style="margin-top:0;font-family:Poppins;">Antagonists</h2>
+      <p class="lead">New characters slide in as you scroll—parallax stays consistent in the background to keep depth.</p>
+
+      <div class="cards-section">
+        <div class="cards-row" id="row2">
+          <div class="card card-tilt" data-name="Villain 1">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop" alt="Villain 1">
+            <div class="info"><h3>Villain 1</h3><p>Cold mastermind</p></div>
+          </div>
+
+          <div class="card card-tilt" data-name="Villain 2">
+            <img src="https://images.unsplash.com/photo-1531123414780-f3b6e7b687b4?q=80&w=1200&auto=format&fit=crop" alt="Villain 2">
+            <div class="info"><h3>Villain 2</h3><p>Chaos bringer</p></div>
+          </div>
+
+          <div class="card card-tilt" data-name="Villain 3">
+            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1200&auto=format&fit=crop" alt="Villain 3">
+            <div class="info"><h3>Villain 3</h3><p>Masked enigma</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / Footer -->
+    <section style="text-align:center; padding:40px; border-radius:12px; margin-bottom:40px;">
+      <h2 style="font-family:Poppins;margin-bottom:10px;">Ready to build your world?</h2>
+      <p class="lead">Replace placeholders with your character art and customise animations/timing below.</p>
+      <div style="margin-top:18px;">
+        <button id="downloadBtn" style="padding:10px 16px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#091217;font-weight:700;cursor:pointer;">Export / Download</button>
+      </div>
+    </section>
+
+  </div>
+
+<script>
+/* ======================================================
+   Notes:
+   - This script uses GSAP + ScrollTrigger for scroll-tied animations.
+   - Parallax: we move background layers at different rates based on scroll.
+   - Tilt: card tilt implemented with mousemove (transform rotateX/Y).
+   - Section transitions: fade/slide cards in/out as panels enter/leave.
+   ====================================================== */
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* -------------------------
+   Parallax layers movement
+   ------------------------- */
+const layerMid = document.querySelector('.layer-mid');
+const layerFore = document.querySelector('.layer-fore');
+
+/* Move layers with scroll using ScrollTrigger:
+   - layerMid moves slower than scroll (farther depth)
+   - layerFore moves a bit faster (closer depth)
+*/
+gsap.to(layerMid, {
+  yPercent: -12,     // move up slightly over full scroll range of hero
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#hero',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: 0.8
+  }
+});
+gsap.to(layerFore, {
+  yPercent: -28,
+  scale: 1.02,
+  opacity: 0.85,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#hero',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: 0.9
+  }
+});
+
+/* -------------------------
+   Hero text & main-card entrance
+   ------------------------- */
+gsap.from('.hero-title', {
+  y: 30, opacity: 0, duration: 1.0, ease: 'power3.out',
+  delay: 0.2
+});
+gsap.from('.hero-sub', { y: 18, opacity: 0, duration: 0.9, ease: 'power3.out', delay: 0.35 });
+gsap.from('#mainCard', { y: 30, opacity: 0, duration: 1.0, ease:'power3.out', delay: 0.45, rotateX: 4 });
+
+/* -------------------------
+   Cards reveal on enter (panels)
+   ------------------------- */
+/* For each panel we fade the row in with a stagger. When leaving, fade out. */
+function animateRow(rowSelector, panelSelector){
+  const row = document.querySelector(rowSelector);
+  gsap.fromTo(row.children, {
+    y: 30, opacity:0
+  }, {
+    y: 0, opacity:1, stagger: 0.12, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: {
+      trigger: panelSelector,
+      start: 'top 70%',
+      end: 'bottom 30%',
+      toggleActions: 'play reverse play reverse'
+    }
+  });
+}
+animateRow('#row1', '#panel1');
+animateRow('#row2', '#panel2');
+
+/* -------------------------
+   Continuous subtle tilt + parallax on each card
+   ------------------------- */
+const cards = document.querySelectorAll('.card-tilt, .main-card');
+
+cards.forEach(card => {
+  // store dims for calculations
+  const img = card.querySelector('img') || card.querySelector('.cover');
+
+  function handleMove(e){
+    // Get bounding rect & cursor position
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;   // 0 to 1
+    const py = (e.clientY - rect.top) / rect.height;   // 0 to 1
+    // Convert to rotation: center is neutral
+    const rotateY = (px - 0.5) * 16;   // tilt left/right
+    const rotateX = (0.5 - py) * 12;   // tilt up/down
+    // Depth translate for inner image (parallax)
+    const translateX = (px - 0.5) * -8;
+    const translateY = (py - 0.5) * -8;
+
+    // apply transforms smoothly with GSAP (GPU accelerated)
+    gsap.to(card, { rotationY: rotateY, rotationX: rotateX, duration: 0.5, ease: 'power3.out', transformPerspective:800, transformOrigin:'center' });
+    if(img) gsap.to(img, { x: translateX, y: translateY, scale:1.03, duration:0.6, ease:'power3.out' });
+  }
+
+  function handleLeave(){
+    // reset transforms
+    gsap.to(card, { rotationY:0, rotationX:0, duration:0.6, ease:'power3.out' });
+    if(img) gsap.to(img, { x:0, y:0, scale:1, duration:0.6, ease:'power3.out' });
+  }
+
+  // pointer events for desktop & touch
+  card.addEventListener('pointermove', handleMove);
+  card.addEventListener('pointerleave', handleLeave);
+  card.addEventListener('pointercancel', handleLeave);
+  card.addEventListener('pointerdown', (e)=> {
+    // slightly scale on press for tactile feedback
+    gsap.to(card, { scale: 0.995, duration: 0.12 });
+  });
+  card.addEventListener('pointerup', ()=> gsap.to(card, { scale:1, duration:0.12 }));
+});
+
+/* -------------------------
+   Section switch animation (optional): as you scroll down from panel1->panel2,
+   we slightly slide panel1 out and panel2 in. ScrollTrigger can control it.
+   ------------------------- */
+gsap.utils.toArray('.panel').forEach((panel, i) => {
+  ScrollTrigger.create({
+    trigger: panel,
+    start: 'top center',
+    end: 'bottom center',
+    onEnter: () => gsap.to(panel, { y: 0, opacity: 1, duration: 0.5, overwrite: true }),
+    onLeaveBack: () => gsap.to(panel, { y: 20, opacity: 0.8, duration: 0.35, overwrite: true })
+  });
+});
+
+/* -------------------------
+   Background music toggle logic (muted by default)
+   ------------------------- */
+const musicBtn = document.getElementById('musicBtn');
+let audio = null;
+let playing = false;
+
+/* Lazy create audio element so we avoid autoplay issues until user clicks */
+musicBtn.addEventListener('click', async ()=>{
+  if(!audio){
+    audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_0d5f5b5b2b.mp3?filename=calm-ambient-11055.mp3');
+    audio.loop = true;
+    audio.volume = 0.25;
+    audio.crossOrigin = 'anonymous';
+  }
+  if(!playing){
+    try{
+      await audio.play();
+      playing = true;
+      musicBtn.textContent = 'Music: On';
+    }catch(e){
+      // browsers can block autoplay, but since this is a user click it's allowed in most cases
+      musicBtn.textContent = 'Music: Play?';
+    }
+  }else{
+    audio.pause();
+    playing = false;
+    musicBtn.textContent = 'Music: Off';
+  }
+});
+
+/* -------------------------
+   Accessibility / performance tips:
+   - GSAP ScrollTrigger: scrub used for subtle parallax. Keep scrub small to avoid jank.
+   - For mobile, pointermove events are used; gestures work on most devices.
+   - Replace images with optimized assets (webp/jpeg ~1200px longest side).
+   - To reduce CPU: avoid too many moving layers or very large blur filters.
+   ------------------------- */
+</script>
+</body>
+</html>

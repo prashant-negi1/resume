@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Portfolio — Prashant Negi. Frontend developer. HTML, CSS, JS, Tailwind, C++, Java, DSA, Git." />
+  <title>Prashant Negi — Portfolio</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="site-header" id="top">
+    <div class="container nav-container">
+      <a class="logo" href="#top" aria-label="Prashant Negi — Home">Prashant<span class="logo-accent">.</span></a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#about">About</a></li>
+          <li><a class="nav-link" href="#skills">Skills</a></li>
+          <li><a class="nav-link" href="#certificates">Certificates</a></li>
+          <li><a class="nav-link" href="#projects">Projects</a></li>
+          <li><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+        <button class="nav-toggle" aria-hidden="true" aria-label="Toggle navigation">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h1 class="hero-title">Hello — I'm <span class="name-highlight">Prashant Negi</span></h1>
+        <p class="hero-sub">Frontend Developer • building accessible, performant, and beautiful user interfaces.</p>
+        <p class="hero-cta-row">
+          <a class="btn primary" href="#projects">See Projects</a>
+          <a class="btn ghost" href="#contact">Contact Me</a>
+        </p>
+      </div>
+      <figure class="hero-photo" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&h=600&fit=crop&q=60" alt="Portrait placeholder">
+      </figure>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section container fade">
+    <div class="about-grid">
+      <div class="about-text">
+        <h2>About Me</h2>
+        <p>I'm a passionate web developer skilled in building modern frontends. I enjoy solving problems, learning new tech, and collaborating with teams to deliver high-quality products.</p>
+        <p>Core strengths: semantic HTML, scalable CSS, JavaScript, component-first thinking and good version-control practices.</p>
+      </div>
+      <div class="about-card" aria-hidden="true">
+        <img src="https://via.placeholder.com/320x220?text=Professional+Photo" alt="Professional portrait placeholder">
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section container fade">
+    <h2>Skills</h2>
+
+    <!-- Technical skills (icons used via devicon + fallback) -->
+    <div class="skills-grid" aria-hidden="false">
+      <!-- Each .skill contains an icon + label -->
+      <div class="skill">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5 icon">
+        <span>HTML</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3 icon">
+        <span>CSS</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript icon">
+        <span>JavaScript</span>
+      </div>
+      <div class="skill">
+        <img src="https://img.icons8.com/color/48/tailwindcss.png" alt="Tailwind CSS icon">
+        <span>Tailwind</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++ icon">
+        <span>C++</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java icon">
+        <span>Java</span>
+      </div>
+      <div class="skill">
+        <img src="https://img.icons8.com/external-flat-juicy-fish/48/external-data-structures-coding-and-development-flat-flat-juicy-fish.png" alt="DSA icon">
+        <span>DSA</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git icon">
+        <span>Git</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub icon">
+        <span>GitHub</span>
+      </div>
+    </div>
+
+    <!-- Soft skills -->
+    <div class="soft-skills">
+      <h3>Soft Skills</h3>
+      <ul class="soft-list">
+        <li>Communication</li>
+        <li>Teamwork</li>
+        <li>Adaptability</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CERTIFICATES -->
+  <section id="certificates" class="section container fade">
+    <h2>Certificates</h2>
+    <div class="cert-grid">
+      <a class="cert-card" href="https://www.codechef.com/" target="_blank" rel="noopener noreferrer">
+        <img src="https://via.placeholder.com/400x240?text=CodeChef+C%2B%2B" alt="CodeChef C++ certificate thumbnail">
+        <div class="cert-meta">
+          <h4>CodeChef — C++ Learning</h4>
+          <p>Issued: 2024</p>
+        </div>
+      </a>
+
+      <a class="cert-card" href="https://www.freecodecamp.org/" target="_blank" rel="noopener noreferrer">
+        <img src="https://via.placeholder.com/400x240?text=FreeCodeCamp" alt="FreeCodeCamp certificate thumbnail">
+        <div class="cert-meta">
+          <h4>freeCodeCamp — Responsive Web</h4>
+          <p>Issued: 2023</p>
+        </div>
+      </a>
+
+      <a class="cert-card" href="#" target="_blank" rel="noopener noreferrer">
+        <img src="https://via.placeholder.com/400x240?text=Other+Certificate" alt="Other certificate thumbnail">
+        <div class="cert-meta">
+          <h4>Other Certificate</h4>
+          <p>Issued: 2022</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section container fade">
+    <h2>Projects</h2>
+    <div class="projects-grid">
+      <!-- Project card -->
+      <article class="project-card">
+        <img src="https://via.placeholder.com/600x360?text=Project+1" alt="Project 1 screenshot">
+        <div class="project-overlay">
+          <h3>Project One</h3>
+          <p>Short description. Tech: HTML, CSS, JS</p>
+          <p class="project-links">
+            <a href="#" target="_blank" rel="noopener noreferrer">Demo</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </p>
+        </div>
+      </article>
+
+      <article class="project-card">
+        <img src="https://via.placeholder.com/600x360?text=Project+2" alt="Project 2 screenshot">
+        <div class="project-overlay">
+          <h3>Project Two</h3>
+          <p>Short description. Tech: React, Tailwind</p>
+          <p class="project-links">
+            <a href="#" target="_blank" rel="noopener noreferrer">Demo</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </p>
+        </div>
+      </article>
+
+      <!-- add more project-cards as needed -->
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section container fade">
+    <h2>Contact</h2>
+    <div class="contact-grid">
+      <form id="contactForm" class="contact-form" action="#" method="post" novalidate>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required placeholder="Your name">
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com">
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="6" required placeholder="Tell me about your project..."></textarea>
+
+        <button type="submit" class="btn primary">Send Message</button>
+        <div id="formMsg" role="status" aria-live="polite" class="form-msg" hidden></div>
+      </form>
+
+      <aside class="contact-info" aria-label="contact info">
+        <h3>Get in touch</h3>
+        <p>Email: <a href="mailto:prashant@example.com">prashant@example.com</a></p>
+        <p>GitHub: <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">github.com/yourusername</a></p>
+        <div class="socials">
+          <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a> •
+          <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Prashant Negi — Built with care.</small>
+    </div>
+  </footer>
+
+  <!-- Javascript -->
+  <script src="main.js" defer></script>
+</body>
+</html>

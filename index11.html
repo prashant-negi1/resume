@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Horizontal Scroll Demo</title>
+<style>
+  /* ===== Reset default margin and padding ===== */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Makes sizing easier and consistent */
+  }
+
+  /* ===== Container holding all the scrollable items ===== */
+  .scroll-container {
+    display: flex; /* Flexbox arranges children in a row by default */
+    overflow-x: auto; /* Enables horizontal scrolling */
+    scroll-snap-type: x mandatory; /* Enables snap points on horizontal axis */
+    scroll-behavior: smooth; /* Smooth scroll when user uses JS or keyboard */
+    height: 100vh; /* Full viewport height */
+    /* Optional: hide vertical scrollbar */
+    overflow-y: hidden;
+
+    /* Custom scrollbar styles for Webkit browsers */
+  }
+  /* Scrollbar styling for WebKit (Chrome, Safari) */
+  .scroll-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  .scroll-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+  .scroll-container::-webkit-scrollbar-thumb {
+    background-color: #00adb5;
+    border-radius: 4px;
+  }
+
+  /* Each card inside the scroll container */
+  .card {
+    scroll-snap-align: start; /* Snap each card to the start of container when scrolling */
+    flex: 0 0 80vw; /* Flex item doesn’t shrink or grow, fixed width = 80% viewport width */
+    height: 80vh; /* Slightly smaller than container height for nice spacing */
+    margin: auto 10vw; /* Center vertically, horizontal spacing between cards */
+    background: linear-gradient(135deg, #00adb5, #393e46); /* Gradient background */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+
+    /* For 3D hover tilt effect */
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  /* On hover, scale up and lift card, add deeper shadow */
+  .card:hover {
+    transform: scale(1.05) translateZ(20px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    cursor: pointer;
+  }
+
+  /* Title inside card */
+  .card h2 {
+    margin-bottom: 1rem;
+  }
+
+  /* Text content */
+  .card p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  /* Responsive tweak for smaller screens */
+  @media (max-width: 600px) {
+    .card {
+      flex: 0 0 90vw;
+      margin: auto 5vw;
+      height: 70vh;
+      padding: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Scroll container with horizontally scrollable cards -->
+<div class="scroll-container" tabindex="0">
+  <div class="card">
+    <h2>Card 1</h2>
+    <p>This is the first card. Notice how it snaps into place when scrolling.</p>
+  </div>
+  <div class="card">
+    <h2>Card 2</h2>
+    <p>Cards use flexbox for horizontal layout and scroll snapping for smooth navigation.</p>
+  </div>
+  <div class="card">
+    <h2>Card 3</h2>
+    <p>Hover on a card to see a subtle 3D scale and shadow effect.</p>
+  </div>
+  <div class="card">
+    <h2>Card 4</h2>
+    <p>indexResize the window or test on mobile to see responsive behavior.</p>
+  </div>
+</div>
+
+</body>
+</html>

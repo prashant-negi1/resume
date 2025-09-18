@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>My Memories — Horizontal Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* =========================
+     THEME & VARIABLES
+     ========================= */
+  :root{
+    --bg: #0f1724;                 /* page background */
+    --card: #0b1220;               /* card background */
+    --muted: #9aa6b2;              /* secondary text */
+    --text: #e6eef7;               /* primary text */
+    --accent: #ffb86b;             /* warm accent */
+    --glass: rgba(255,255,255,0.03);
+    --radius: 14px;
+    --gap: 18px;
+    --ease: cubic-bezier(.2,.9,.2,1);
+    --auto-speed: 0.3;             /* px per tick baseline for auto scroll (customizable) */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root { --auto-speed: 0; }     /* stop auto-scroll for reduced motion users */
+    * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+  }
+
+  /* =========================
+     GLOBAL
+     ========================= */
+  *{ box-sizing: border-box; }
+  body{
+    margin:0; min-height:100vh;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background: linear-gradient(180deg,var(--bg), #07101a 160%);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:28px;
+  }
+  a{ color:inherit; text-decoration:none; }
+  .container{ max-width:1200px; margin:0 auto; }
+
+  header{ display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:18px; }
+  .brand{ display:flex; gap:12px; align-items:center; }
+  .logo{ width:48px; height:48px; border-radius:10px; background:linear-gradient(135deg,var(--accent), #ff8a5b); display:grid; place-items:center; color:#091217; font-weight:700; }
+  h1{ font-size:20px; margin:0; font-weight:700; }
+  .subtitle{ color:var(--muted); font-size:13px; margin-top:4px; }
+
+  /* controls */
+  .controls{ display:flex; gap:10px; align-items:center; }
+  .btn{
+    background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--text);
+    padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:600;
+    transition: transform 220ms var(--ease), box-shadow 220ms var(--ease);
+  }
+  .btn:hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.6); }
+  .toggle{
+    display:inline-flex; gap:8px; align-items:center;
+  }
+
+  /* =========================
+     HORIZONTAL GALLERY LAYOUT
+     ========================= */
+  .gallery-wrap{
+    margin-top:18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    padding:20px; border-radius:16px; border:1px solid rgba(255,255,255,0.02);
+  }
+
+  /* scroll area */
+  .track{
+    display:flex;
+    gap:var(--gap);
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:14px;
+    scroll-behavior: smooth; /* smooth manual jumps */
+    -webkit-overflow-scrolling: touch;
+    align-items:center;
+  }
+
+  /* hide scrollbar but keep scroll accessible */
+  .track::-webkit-scrollbar{ height:10px; }
+  .track::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.06); border-radius:8px; }
+  .track{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.06) transparent; }
+
+  /* each card */
+  .card{
+    flex: 0 0 auto;                 /* prevent shrinking; keeps horizontal flow */
+    width: 320px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    overflow:hidden;
+    position:relative;
+    transition: transform 360ms var(--ease), box-shadow 360ms var(--ease);
+    cursor: zoom-in;
+  }
+
+  /* image inside card */
+  .card img{
+    width:100%; height:220px; object-fit:cover; display:block;
+    transition: transform 400ms var(--ease), filter 400ms var(--ease);
+  }
+  /* info area */
+  .card .meta{ padding:12px; display:flex; gap:10px; align-items:start; }
+  .card .meta h3{ margin:0; font-size:16px; }
+  .card .meta p{ margin:4px 0 0 0; color:var(--muted); font-size:13px; }
+
+  /* Hover microinteraction: subtle zoom + lift + tilt */
+  .card:hover{
+    transform: translateY(-8px) scale(1.02) rotateX(0.3deg);
+    box-shadow: 0 26px 60px rgba(0,0,0,0.65);
+  }
+  .card:hover img{ transform: scale(1.06); filter: saturate(1.05) contrast(1.02); }
+
+  /* responsive card sizing */
+  @media (max-width:900px){
+    .card{ width: 280px; }
+    .card img{ height:190px; }
+  }
+  @media (max-width:520px){
+    .card{ width: 220px; }
+    .card img{ height:140px; }
+  }
+
+  /* =========================
+     PROGRESS / INDICATOR
+     ========================= */
+  .progress-bar{
+    height:6px; background: rgba(255,255,255,0.03); border-radius:999px; margin-top:14px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; width:0%; background: linear-gradient(90deg,var(--accent), #ff8a5b); transition: width 220ms linear;
+  }
+
+  /* =========================
+     LIGHTBOX / MODAL
+     ========================= */
+  .lightbox{
+    position:fixed; inset:0; display:none; place-items:center; background: rgba(0,0,0,0.75);
+    z-index:120; padding:20px;
+  }
+  .lightbox.show{ display:grid; animation: fadeIn 260ms var(--ease) both; }
+  .lightbox img{ max-width:1100px; max-height:80vh; border-radius:12px; box-shadow: 0 30px 80px rgba(0,0,0,0.8); }
+  .lb-close{ position:absolute; top:20px; right:20px; background:transparent; border:0; color:var(--text); font-size:20px; cursor:pointer; }
+
+  @keyframes fadeIn{ from{ opacity:0; transform: translateY(6px) } to{ opacity:1; transform:none } }
+
+  /* =========================
+     EXTRA: small helper UI
+     ========================= */
+  .controls-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:10px; }
+  .small-muted{ color:var(--muted); font-size:13px; }
+  .speed-range{ width:160px; }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="brand">
+        <div class="logo">M</div>
+        <div>
+          <h1>My Memories</h1>
+          <div class="subtitle">A journey through special moments</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="toggle">
+          <button id="autoBtn" class="btn" title="Toggle auto-scroll">Auto scroll: <span id="autoState">Off</span></button>
+        </div>
+
+        <div class="toggle">
+          <button id="musicBtn" class="btn" title="Play / Pause background music">Music</button>
+        </div>
+
+        <button id="leftBtn" class="btn" aria-label="Scroll left">◀</button>
+        <button id="rightBtn" class="btn" aria-label="Scroll right">▶</button>
+      </div>
+    </header>
+
+    <!-- GALLERY AREA -->
+    <section class="gallery-wrap" aria-label="Memory gallery">
+      <!-- horizontal track scroller -->
+      <div class="track" id="track" tabindex="0" aria-roledescription="carousel" aria-label="Memories track">
+        <!-- Example cards; replace src with your photos. Support varying image sizes -->
+        <div class="card" data-title="Birthday 2022">
+          <img src="https://images.unsplash.com/photo-1524503033411-c9566986fc8f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=f7b7f1d5d1c6039f6f9db3d404a3a8d1" alt="Birthday photo">
+          <div class="meta">
+            <div>
+              <h3>Birthday 2022</h3>
+              <p class="small-muted">Candles, cake & friends</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-title="Road Trip">
+          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=ab8cecc7cc2c4d8f9915b21c9b0d5f8c" alt="Road trip">
+          <div class="meta">
+            <div>
+              <h3>Road Trip</h3>
+              <p class="small-muted">Open roads & memories</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-title="Family Picnic">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0dd2b4b8b2d5b05fef3c7f66a0f9c1b2" alt="Picnic">
+          <div class="meta">
+            <div>
+              <h3>Family Picnic</h3>
+              <p class="small-muted">Sun & sandwiches</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-title="Friends Night">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=8a9d1c2f1b1b2f3a6bc3e7c9c7f9b0bd" alt="Friends">
+          <div class="meta">
+            <div>
+              <h3>Friends Night</h3>
+              <p class="small-muted">Laughs & stories</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add or remove cards as needed -->
+        <div class="card" data-title="Festival">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=2b7b4a5e2b8b2a7abbb2f6c8c2f6a6f0" alt="Festival">
+          <div class="meta">
+            <div>
+              <h3>Festival</h3>
+              <p class="small-muted">Colors & music</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-title="Beach Day">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=5f9a8f4e2b2a6b8c4d5e6f7a8b9c0d1e" alt="Beach">
+          <div class="meta">
+            <div>
+              <h3>Beach Day</h3>
+              <p class="small-muted">Waves and sun</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- progress indicator -->
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="Scroll progress">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <!-- extra controls -->
+      <div class="controls-row">
+        <div class="small-muted">Hover the gallery to pause auto-scroll. Click any image to open full size.</div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <label class="small-muted" for="speed">Speed</label>
+          <input id="speed" class="speed-range" type="range" min="0" max="1.2" step="0.05" value="0.3" title="Adjust auto-scroll speed">
+        </div>
+      </div>
+    </section>
+
+    <footer style="margin-top:20px; color:var(--muted); font-size:13px; text-align:center;">
+      Built with ♥ • Replace images with your own to keep memories private.
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+    <img id="lbImg" alt="">
+  </div>
+
+  <!-- background music (muted by default) -->
+  <audio id="bgAudio" loop crossorigin="anonymous">
+    <!-- You can replace the src with your chosen music file (ensure allowed usage) -->
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/17/audio_1a7b3f2b79.mp3?filename=soft-ambient-11001.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+/* =========================
+   HORIZONTAL SCROLL + AUTO-SCROLL
+   - Auto scroll uses requestAnimationFrame to increment scrollLeft
+   - Hovering the track pauses auto-scroll
+   - Left/Right buttons jump by card width
+   ========================= */
+(function(){
+  const track = document.getElementById('track');
+  const leftBtn = document.getElementById('leftBtn');
+  const rightBtn = document.getElementById('rightBtn');
+  const autoBtn = document.getElementById('autoBtn');
+  const autoState = document.getElementById('autoState');
+  const progressFill = document.getElementById('progressFill');
+  const speedRange = document.getElementById('speed');
+
+  // state
+  let auto = false;
+  let rafId = null;
+  let lastTime = null;
+  let paused = false;
+  let speed = parseFloat(speedRange.value) || 0.3; // px per 16ms approx baseline
+
+  // update speed from slider
+  speedRange.addEventListener('input', ()=> {
+    speed = parseFloat(speedRange.value);
+  });
+
+  // auto toggle
+  autoBtn.addEventListener('click', ()=> {
+    auto = !auto;
+    autoState.textContent = auto ? 'On' : 'Off';
+    if(auto) startAuto(); else stopAuto();
+  });
+
+  // pause on hover
+  track.addEventListener('mouseenter', ()=> { paused = true; });
+  track.addEventListener('mouseleave', ()=> { paused = false; });
+
+  // also pause on mousedown (dragging) to avoid jump
+  track.addEventListener('mousedown', ()=> paused = true);
+  document.addEventListener('mouseup', ()=> paused = false);
+
+  // left/right buttons: scroll by approx one card
+  function cardWidth(){
+    const c = track.querySelector('.card');
+    if(!c) return 320 + 18;
+    const style = getComputedStyle(c);
+    return c.offsetWidth + parseFloat(style.marginRight || 18);
+  }
+  leftBtn.addEventListener('click', ()=> {
+    track.scrollBy({ left: -cardWidth(), behavior: 'smooth' });
+  });
+  rightBtn.addEventListener('click', ()=> {
+    track.scrollBy({ left: cardWidth(), behavior: 'smooth' });
+  });
+
+  // manual drag support (desktop)
+  let isDown = false, startX, scrollLeftStart;
+  track.addEventListener('pointerdown', (e)=>{
+    isDown = true; track.setPointerCapture(e.pointerId);
+    startX = e.clientX; scrollLeftStart = track.scrollLeft; paused = true;
+  });
+  track.addEventListener('pointermove', (e)=>{
+    if(!isDown) return;
+    const dx = startX - e.clientX;
+    track.scrollLeft = scrollLeftStart + dx;
+  });
+  track.addEventListener('pointerup', (e)=>{ isDown=false; paused=false; track.releasePointerCapture(e.pointerId); });
+
+  // update progress
+  function updateProgress(){
+    const max = track.scrollWidth - track.clientWidth;
+    const pct = max ? (track.scrollLeft / max) * 100 : 0;
+    progressFill.style.width = pct + '%';
+  }
+  track.addEventListener('scroll', updateProgress);
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+
+  // Auto-scroll loop using requestAnimationFrame for smoothness
+  function step(ts){
+    if(!lastTime) lastTime = ts;
+    const delta = ts - lastTime;
+    lastTime = ts;
+
+    if(auto && !paused){
+      // Move by speed * (delta / 16) so speed roughly px per 16ms
+      const move = speed * (delta / 16);
+      track.scrollLeft += move;
+      // loop back to start when reaching end (continuous)
+      if(track.scrollLeft + track.clientWidth >= track.scrollWidth - 1){
+        track.scrollLeft = 0; // jump to start
+      }
+    }
+
+    // keep updating progress always
+    updateProgress();
+    rafId = requestAnimationFrame(step);
+  }
+
+  function startAuto(){
+    if(rafId) cancelAnimationFrame(rafId);
+    lastTime = null;
+    rafId = requestAnimationFrame(step);
+  }
+  function stopAuto(){
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  // start/stop depending on auto flag
+  // don't auto start until user clicks to enable (privacy & accessibility)
+  // but start frame loop anyway to keep UI reactive (optional)
+  rafId = requestAnimationFrame(step);
+
+  // cleanup on page hide (reduce CPU)
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden) { stopAuto(); } else { if(auto) startAuto(); rafId = requestAnimationFrame(step); }
+  });
+})();
+
+/* =========================
+   LIGHTBOX (click card to open)
+   - Simple accessible modal: sets aria-hidden and ESC to close
+   - Clicking background or close button closes
+   ========================= */
+(function(){
+  const track = document.getElementById('track');
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbClose = document.getElementById('lbClose');
+
+  track.addEventListener('click', (e)=>{
+    const card = e.target.closest('.card');
+    if(!card) return;
+    const img = card.querySelector('img');
+    if(!img) return;
+    lbImg.src = img.src;
+    lbImg.alt = card.dataset.title || img.alt || 'Memory photo';
+    lightbox.classList.add('show');
+    lightbox.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeLb(){
+    lightbox.classList.remove('show');
+    lightbox.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  lbClose.addEventListener('click', closeLb);
+  lightbox.addEventListener('click', (e)=> { if(e.target === lightbox) closeLb(); });
+  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') closeLb(); });
+})();
+
+/* =========================
+   BACKGROUND MUSIC CONTROL
+   - Muted by default: user must play (autoplay blocked in browsers)
+   - Clicking toggles play/pause
+   ========================= */
+(function(){
+  const audio = document.getElementById('bgAudio');
+  const musicBtn = document.getElementById('musicBtn');
+  let playing = false;
+  audio.volume = 0.35; // comfortable volume
+
+  // start muted (browsers often block autoplay); button toggles playback
+  musicBtn.addEventListener('click', async ()=>{
+    if(!playing){
+      try{
+        await audio.play();
+        playing = true;
+        musicBtn.textContent = 'Music: On';
+      }catch(err){
+        // failed to play (autoplay blocked) - show text
+        musicBtn.textContent = 'Play allowed?';
+      }
+    } else {
+      audio.pause(); playing = false;
+      musicBtn.textContent = 'Music: Off';
+    }
+  });
+})();
+
+/* =========================
+   HELPER: replace example images with user files
+   - For privacy, store on your own server or use local paths
+   ========================= */
+/* Comments:
+   - To add images, duplicate a <div class="card">... block inside .track and set the <img src=""> to your photo.
+   - Keep picture sizes reasonable (e.g., 1200px on longest side) for performance.
+   - For continuous auto-scroll speed change the range slider (0 = off, ~0.3 default).
+   - Hovering the gallery pauses auto-scroll so user can inspect photos.
+*/
+</script>
+</body>
+</html>
