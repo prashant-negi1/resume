@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind</title>
+    <link rel="stylesheet" href="output.css">
+
+</head>
+<body >
+  <!-- wraper -->
+
+      <div class="wrapper flex justify-center items-center h-screen  w-full bg-gray-300 ">
+        <!-- main div -->
+         <div class="main box-border  bg-white p-8 rounded-2xl shadow-2xl flex flex-col gap-4 w-2/7">
+          <!-- heading -->
+          <h1 class="text-center text-3xl text-black font-bold mt-1.5">Pro Plan</h1>
+          <!-- paragraph -->
+          <p class=" text-xl text-gray-600  text-center ">Ideal for developers and startups who want power and performance</p>
+          <!-- pricing -->
+          <div class="text-center m-2">
+            <span class="price text-blue-600 font-bold text-3xl">$999</span>
+            <span class="per font-semibold  ">/month</span>
+          </div>
+          <!-- checkboxes -->
+          <div class=" flex flex-col gap-2.5 ">
+            <!-- first checkbox and text 
+              -->
+            <div class="flex  gap-1 items-center">
+               <input type="checkbox"
+           checked
+           disabled
+           class="appearance-none w-5 h-5 bg-green-600 border border-black 
+                  flex items-center justify-center
+                  checked:after:content-['✓'] checked:after:text-white 
+                  checked:after:text-sm checked:after:font-bold 
+                  checked:after:flex checked:after:items-center checked:after:justify-center" />
+
+    <label class="text-gray-800 font-medium">Unlimited Projects</label>
+            </div>
+            <!-- second checkbox and text -->
+             <div class="flex  gap-1 items-center">
+               <input type="checkbox"
+           checked
+           disabled
+           class="appearance-none w-5 h-5 bg-green-600 border border-black 
+                  flex items-center justify-center
+                  checked:after:content-['✓'] checked:after:text-white 
+                  checked:after:text-sm checked:after:font-bold 
+                  checked:after:flex checked:after:items-center checked:after:justify-center" />
+
+    <label class="text-gray-800 font-medium">100 GB Storage </label>
+            </div>
+            <!-- third checkbox and text  -->
+             <div class="flex  gap-1 items-center">
+               <input type="checkbox"
+           checked
+           disabled
+           class="appearance-none w-5 h-5 bg-green-600 border border-black 
+                  flex items-center justify-center
+                  checked:after:content-['✓'] checked:after:text-white 
+                  checked:after:text-sm checked:after:font-bold 
+                  checked:after:flex checked:after:items-center checked:after:justify-center" />
+
+    <label class="text-gray-800 font-medium"> Priority Support</label>
+            </div>
+          </div>
+          <!-- get started button  -->
+          <button class=" bg-blue-700 max-h-fit px-6 py-3 max-w-fit text-center m-auto rounded-xl font-semibold text-xl text-white mb-4.5 mt-2.5">Get Started</button>
+         </div>
+      </div>
+ 
+
+</body>
+</html>
